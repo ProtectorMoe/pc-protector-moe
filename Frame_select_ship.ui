@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Frame_select_ship</class>
+ <widget class="QDialog" name="Frame_select_ship">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>515</width>
+    <height>581</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>-50</x>
+     <y>540</y>
+     <width>341</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>191</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>双击船只添加,单击添加列表删除</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>20</y>
+     <width>211</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>筛选条件</string>
+   </property>
+   <widget class="QCheckBox" name="cb_level">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>等级:</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="cb_level_min">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>27</y>
+      <width>42</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>110</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="cb_level_max">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>27</y>
+      <width>42</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>110</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>30</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>到</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="cb_type">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>60</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>全部</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>航母</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>轻母</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>装母</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>战列</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>航战</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>战巡</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>重巡</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>航巡</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>雷巡</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>轻巡</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>重炮</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>驱逐</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>潜母</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>潜艇</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>炮潜</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>补给</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>导驱</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>防驱</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>其他</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>54</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>类型:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>名称:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ed_name">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>100</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QListWidget" name="lt_select_ship">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>160</y>
+     <width>211</width>
+     <height>371</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="lt_all_ship">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>261</width>
+     <height>501</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Frame_select_ship</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Frame_select_ship</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FrameMine</class>
+ <widget class="QMainWindow" name="FrameMine">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>513</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>护萌宝-图鉴</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>icon/icon.png</normaloff>icon/icon.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>已解锁:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>10</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>未解锁:</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="lt_exist_ship">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>261</width>
+      <height>451</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="lt_not_exist_ship">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>30</y>
+      <width>261</width>
+      <height>451</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>20</y>
+      <width>221</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>搜索</string>
+    </property>
+    <widget class="QComboBox" name="cb_type">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>70</y>
+       <width>151</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>全部</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>航母</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>轻母</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>装母</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>战列</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>航战</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>战巡</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>重巡</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>航巡</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>雷巡</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>轻巡</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>重炮</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>驱逐</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>潜母</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>潜艇</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>炮潜</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>补给</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>导驱</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>防驱</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>其他</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>54</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>类型:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>名称:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="ed_name">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>100</y>
+       <width>151</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cb_count_2">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>40</y>
+       <width>61</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>两星</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cb_count_3">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>40</y>
+       <width>61</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>三星</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cb_count_4">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>20</y>
+       <width>61</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>四星</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cb_count_5">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>20</y>
+       <width>61</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>五星</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cb_count_6">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>20</y>
+       <width>61</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>六星</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cb_count_1">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>40</y>
+       <width>61</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>一星</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>160</y>
+      <width>231</width>
+      <height>341</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>信息</string>
+    </property>
+    <widget class="QTableWidget" name="tw_detail">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>211</width>
+       <height>291</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="bt_detail">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>310</y>
+       <width>211</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>查看详细/掉落信息</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="tv_exist">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>490</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>共:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="tv_not_exist">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>490</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>共:</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
