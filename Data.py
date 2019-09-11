@@ -112,9 +112,8 @@ class GameData:
         self.mine = {}
 
     def get_mine_version(self):
-        url = 'http://www.simonkimi.top/'
+        url = 'https://raw.githubusercontent.com/bcxmzbcxm/pc-protector-moe/master/upgrade/version.json'
         try:
-            session.get("http://monster.gostats.cn/bin/count/a_507596/t_5/i_1/counter.png", timeout=5)
             self.mine = json.loads(session.get(url=url, timeout=5).text)
         except Exception as e:
             print('Check upgrade Error:', e)

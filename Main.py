@@ -3930,23 +3930,13 @@ class OtherFunction:
         if "notice" in gameData.mine:
             QMessageBox.information(windows_main, "公告", gameData.mine["notice"], QMessageBox.Yes)
         if 'version' in gameData.mine:
-            if gameData.mine['version'] > VERSION:  # 版本过期
-                download = gameData.mine['url']
-                new_version = gameData.mine['version']
-                new_version_type = gameData.mine['version_type']
-                data = ''
-                if str(new_version) in gameData.mine['history_data']:
-                    data = gameData.mine['history_data'][str(new_version)]
-                speak = '发现新版本:' + str(new_version_type) + str(new_version)
-                if data != '':
-                    speak += '\n更新日志:' + data
-                speak += '\n是否去下载最新版本?'
+            if gameData.mine['build_version'] > BUILD_VERSION:  # 版本过期
+                speak = f"""发现新版本\n版本号{gameData.mine['version']}\n更新说明{gameData.mine['description']}"""
                 reply = QMessageBox.question(windows_main, '护萌宝', speak, QMessageBox.Yes | QMessageBox.No,
                                              QMessageBox.Yes)
                 if reply == QMessageBox.Yes:
-                    if os.path.exists("Upgrade.exe"):
-                        win32api.ShellExecute(0, 'open', 'Upgrade.exe', '', '', 1)
-                        os._exit(0)
+                    webbrowser.open("https://github.com/bcxmzbcxm/pc-protector-moe/releases")
+
             else:
                 return False
         else:
