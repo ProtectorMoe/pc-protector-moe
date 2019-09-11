@@ -75,7 +75,6 @@ class WindowsUserLogin(QDialog, Ui_Frame_user_login):
             data = {"username": self.username, "password": self.password, "server": self.server}
             f.write(json.dumps(data))
 
-
 class WindowsLogin(QMainWindow, Ui_Frame_login):
     first_login_signal = pyqtSignal(dict)
     second_login_signal = pyqtSignal(dict)
