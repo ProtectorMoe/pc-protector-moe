@@ -111,12 +111,6 @@ class GameData:
 
         self.mine = {}
 
-    def get_mine_version(self):
-        url = 'https://raw.githubusercontent.com/bcxmzbcxm/pc-protector-moe/master/upgrade/version.json'
-        try:
-            self.mine = json.loads(session.get(url=url, timeout=5).text)
-        except Exception as e:
-            print('Check upgrade Error:', e)
 
     def get_data(self, version, cookies, server, channel):
         self.cookies = cookies
@@ -355,7 +349,7 @@ class GameData:
         返回值：dict
         """
         try:
-            url = self.server + 'guard/getLevelNode/' + node + self.get_url_end()
+            url = self.server + 'five/getPveData/'  + self.get_url_end()
             data = zlib.decompress(
                 session.get(url=url, headers=HEADER,
                             cookies=self.cookies, timeout=10).content)

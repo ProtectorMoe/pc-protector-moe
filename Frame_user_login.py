@@ -2,16 +2,18 @@
 
 # Form implementation generated from reading ui file 'Frame_user_login.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Frame_user_login(object):
     def setupUi(self, Frame_user_login):
         Frame_user_login.setObjectName("Frame_user_login")
-        Frame_user_login.resize(180, 153)
+        Frame_user_login.resize(187, 174)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icon/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Frame_user_login.setWindowIcon(icon)
@@ -51,11 +53,14 @@ class Ui_Frame_user_login(object):
         self.label_3.setScaledContents(True)
         self.label_3.setObjectName("label_3")
         self.bt_close = QtWidgets.QPushButton(Frame_user_login)
-        self.bt_close.setGeometry(QtCore.QRect(10, 120, 161, 23))
+        self.bt_close.setGeometry(QtCore.QRect(30, 120, 141, 23))
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("icon/login.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_close.setIcon(icon1)
         self.bt_close.setObjectName("bt_close")
+        self.checkBox = QtWidgets.QCheckBox(Frame_user_login)
+        self.checkBox.setGeometry(QtCore.QRect(30, 150, 71, 16))
+        self.checkBox.setObjectName("checkBox")
 
         self.retranslateUi(Frame_user_login)
         QtCore.QMetaObject.connectSlotsByName(Frame_user_login)
@@ -70,4 +75,4 @@ class Ui_Frame_user_login(object):
         self.cb_server.setItemText(4, _translate("Frame_user_login", "国际服"))
         self.label_4.setText(_translate("Frame_user_login", "请输入游戏账号和密码"))
         self.bt_close.setText(_translate("Frame_user_login", "登录"))
-
+        self.checkBox.setText(_translate("Frame_user_login", "自动登录"))

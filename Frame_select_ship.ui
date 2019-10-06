@@ -218,6 +218,11 @@
     </item>
     <item>
      <property name="text">
+      <string>导战</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>其他</string>
      </property>
     </item>

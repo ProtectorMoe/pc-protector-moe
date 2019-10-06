@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>护萌宝-图鉴</string>
+   <string>护萌宝·Re-图鉴</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -178,6 +178,11 @@
      <item>
       <property name="text">
        <string>防驱</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>导战</string>
       </property>
      </item>
      <item>

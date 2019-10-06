@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'Frame_select_ship.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Frame_select_ship(object):
     def setupUi(self, Frame_select_ship):
@@ -42,6 +44,7 @@ class Ui_Frame_select_ship(object):
         self.cb_type = QtWidgets.QComboBox(self.groupBox)
         self.cb_type.setGeometry(QtCore.QRect(60, 60, 111, 22))
         self.cb_type.setObjectName("cb_type")
+        self.cb_type.addItem("")
         self.cb_type.addItem("")
         self.cb_type.addItem("")
         self.cb_type.addItem("")
@@ -109,7 +112,7 @@ class Ui_Frame_select_ship(object):
         self.cb_type.setItemText(16, _translate("Frame_select_ship", "补给"))
         self.cb_type.setItemText(17, _translate("Frame_select_ship", "导驱"))
         self.cb_type.setItemText(18, _translate("Frame_select_ship", "防驱"))
-        self.cb_type.setItemText(19, _translate("Frame_select_ship", "其他"))
+        self.cb_type.setItemText(19, _translate("Frame_select_ship", "导战"))
+        self.cb_type.setItemText(20, _translate("Frame_select_ship", "其他"))
         self.label_3.setText(_translate("Frame_select_ship", "类型:"))
         self.label_4.setText(_translate("Frame_select_ship", "名称:"))
-

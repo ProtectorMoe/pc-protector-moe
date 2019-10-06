@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'Frame_count_ship.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Frame_count_ship(object):
     def setupUi(self, Frame_count_ship):
@@ -80,4 +82,3 @@ class Ui_Frame_count_ship(object):
         self.label.setText(_translate("Frame_count_ship", "只看点:"))
         self.label_2.setText(_translate("Frame_count_ship", "只看船:"))
         self.bt_claen.setText(_translate("Frame_count_ship", "清空"))
-

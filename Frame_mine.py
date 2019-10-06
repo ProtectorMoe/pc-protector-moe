@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'Frame_mine.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_FrameMine(object):
     def setupUi(self, FrameMine):
@@ -35,6 +37,7 @@ class Ui_FrameMine(object):
         self.cb_type = QtWidgets.QComboBox(self.groupBox)
         self.cb_type.setGeometry(QtCore.QRect(60, 70, 151, 22))
         self.cb_type.setObjectName("cb_type")
+        self.cb_type.addItem("")
         self.cb_type.addItem("")
         self.cb_type.addItem("")
         self.cb_type.addItem("")
@@ -112,7 +115,7 @@ class Ui_FrameMine(object):
 
     def retranslateUi(self, FrameMine):
         _translate = QtCore.QCoreApplication.translate
-        FrameMine.setWindowTitle(_translate("FrameMine", "护萌宝-图鉴"))
+        FrameMine.setWindowTitle(_translate("FrameMine", "护萌宝·Re-图鉴"))
         self.label.setText(_translate("FrameMine", "已解锁:"))
         self.label_2.setText(_translate("FrameMine", "未解锁:"))
         self.groupBox.setTitle(_translate("FrameMine", "搜索"))
@@ -135,7 +138,8 @@ class Ui_FrameMine(object):
         self.cb_type.setItemText(16, _translate("FrameMine", "补给"))
         self.cb_type.setItemText(17, _translate("FrameMine", "导驱"))
         self.cb_type.setItemText(18, _translate("FrameMine", "防驱"))
-        self.cb_type.setItemText(19, _translate("FrameMine", "其他"))
+        self.cb_type.setItemText(19, _translate("FrameMine", "导战"))
+        self.cb_type.setItemText(20, _translate("FrameMine", "其他"))
         self.label_4.setText(_translate("FrameMine", "类型:"))
         self.label_5.setText(_translate("FrameMine", "名称:"))
         self.cb_count_2.setText(_translate("FrameMine", "两星"))
@@ -148,4 +152,3 @@ class Ui_FrameMine(object):
         self.bt_detail.setText(_translate("FrameMine", "查看详细/掉落信息"))
         self.tv_exist.setText(_translate("FrameMine", "共:"))
         self.tv_not_exist.setText(_translate("FrameMine", "共:"))
-

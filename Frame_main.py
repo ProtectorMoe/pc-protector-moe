@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'Frame_main.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Frame_main(object):
     def setupUi(self, Frame_main):
@@ -21,7 +23,7 @@ class Ui_Frame_main(object):
         self.centralwidget = QtWidgets.QWidget(Frame_main)
         self.centralwidget.setObjectName("centralwidget")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox.setGeometry(QtCore.QRect(10, 10, 521, 51))
+        self.groupBox.setGeometry(QtCore.QRect(10, 10, 581, 51))
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
         self.label_7 = QtWidgets.QLabel(self.groupBox)
@@ -332,6 +334,15 @@ class Ui_Frame_main(object):
         self.label_9 = QtWidgets.QLabel(self.cb_dismantle)
         self.label_9.setGeometry(QtCore.QRect(10, 250, 181, 16))
         self.label_9.setObjectName("label_9")
+        self.RelineEdit = QtWidgets.QLineEdit(self.cb_dismantle)
+        self.RelineEdit.setGeometry(QtCore.QRect(60, 280, 113, 20))
+        self.RelineEdit.setObjectName("RelineEdit")
+        self.label_15 = QtWidgets.QLabel(self.cb_dismantle)
+        self.label_15.setGeometry(QtCore.QRect(10, 310, 81, 16))
+        self.label_15.setObjectName("label_15")
+        self.label_16 = QtWidgets.QLabel(self.cb_dismantle)
+        self.label_16.setGeometry(QtCore.QRect(10, 280, 54, 16))
+        self.label_16.setObjectName("label_16")
         self.cb_strengthen = QtWidgets.QGroupBox(self.groupBox_9)
         self.cb_strengthen.setGeometry(QtCore.QRect(250, 10, 411, 361))
         self.cb_strengthen.setCheckable(True)
@@ -521,41 +532,13 @@ class Ui_Frame_main(object):
         self.cb_repair_time = QtWidgets.QCheckBox(self.groupBox_22)
         self.cb_repair_time.setGeometry(QtCore.QRect(10, 41, 91, 20))
         self.cb_repair_time.setObjectName("cb_repair_time")
-        self.ed_repair_time = QtWidgets.QTimeEdit(self.groupBox_22)
+        self.ed_repair_time = QtWidgets.QDoubleSpinBox(self.groupBox_22)
         self.ed_repair_time.setGeometry(QtCore.QRect(60, 40, 61, 20))
         self.ed_repair_time.setObjectName("ed_repair_time")
         self.label_42 = QtWidgets.QLabel(self.groupBox_22)
         self.label_42.setGeometry(QtCore.QRect(120, 40, 72, 20))
         self.label_42.setObjectName("label_42")
         self.sw_mian.addWidget(self.page_6)
-        self.label_21 = QtWidgets.QLabel(self.centralwidget)
-        self.label_21.setGeometry(QtCore.QRect(660, 0, 71, 71))
-        self.label_21.setFrameShape(QtWidgets.QFrame.Box)
-        self.label_21.setText("")
-        self.label_21.setPixmap(QtGui.QPixmap("icon/qun.png"))
-        self.label_21.setScaledContents(True)
-        self.label_21.setObjectName("label_21")
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(610, 10, 31, 31))
-        self.label_2.setText("")
-        self.label_2.setPixmap(QtGui.QPixmap("icon/zfb.png"))
-        self.label_2.setScaledContents(True)
-        self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(580, 10, 31, 31))
-        self.label_3.setText("")
-        self.label_3.setPixmap(QtGui.QPixmap("icon/wx.png"))
-        self.label_3.setScaledContents(True)
-        self.label_3.setObjectName("label_3")
-        self.bt_pay = QtWidgets.QPushButton(self.centralwidget)
-        self.bt_pay.setGeometry(QtCore.QRect(550, 40, 91, 23))
-        self.bt_pay.setObjectName("bt_pay")
-        self.label_13 = QtWidgets.QLabel(self.centralwidget)
-        self.label_13.setGeometry(QtCore.QRect(550, 10, 31, 31))
-        self.label_13.setText("")
-        self.label_13.setPixmap(QtGui.QPixmap("icon/hbicon.png"))
-        self.label_13.setScaledContents(True)
-        self.label_13.setObjectName("label_13")
         Frame_main.setCentralWidget(self.centralwidget)
         self.menuBar = QtWidgets.QMenuBar(Frame_main)
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 748, 23))
@@ -570,7 +553,7 @@ class Ui_Frame_main(object):
 
     def retranslateUi(self, Frame_main):
         _translate = QtCore.QCoreApplication.translate
-        Frame_main.setWindowTitle(_translate("Frame_main", "护萌宝"))
+        Frame_main.setWindowTitle(_translate("Frame_main", "护萌宝·Re"))
         self.tv_shipNum.setText(_translate("Frame_main", "<html><head/><body><p>117/120</p></body></html>"))
         self.tv_oil.setText(_translate("Frame_main", "58093"))
         self.tv_ammo.setText(_translate("Frame_main", "70738"))
@@ -611,9 +594,9 @@ class Ui_Frame_main(object):
         self.cb_rank.setText(_translate("Frame_main", "上榜停止(击沉榜)"))
         self.cb_500stop.setText(_translate("Frame_main", "出500船停止"))
         self.label_4.setText(_translate("Frame_main", "全局:"))
-        self.groupBox_3.setTitle(_translate("Frame_main", "空闲设置"))
+        self.groupBox_3.setTitle(_translate("Frame_main", "设置"))
         self.cb_free_explore.setText(_translate("Frame_main", "空闲时远征"))
-        self.cb_free_shower.setText(_translate("Frame_main", "空闲时泡澡"))
+        self.cb_free_shower.setText(_translate("Frame_main", "泡澡"))
         self.groupBox_4.setTitle(_translate("Frame_main", "其他功能"))
         self.cb_changeName.setText(_translate("Frame_main", "出船自动改名"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("Frame_main", "全局设置"))
@@ -635,6 +618,9 @@ class Ui_Frame_main(object):
         self.label_5.setText(_translate("Frame_main", "支持模糊匹配，使用-隔离"))
         self.label_6.setText(_translate("Frame_main", "例如：朱诺-亚特"))
         self.label_9.setText(_translate("Frame_main", "结果：朱诺，亚特兰大"))
+        self.RelineEdit.setText(_translate("Frame_main", "30"))
+        self.label_15.setText(_translate("Frame_main", "秒后重新登录"))
+        self.label_16.setText(_translate("Frame_main", "掉线后"))
         self.cb_strengthen.setTitle(_translate("Frame_main", "强化设置"))
         self.label.setText(_translate("Frame_main", "待强化船只:"))
         self.cb_s_f.setText(_translate("Frame_main", "火力"))
@@ -671,9 +657,7 @@ class Ui_Frame_main(object):
         self.label_38.setText(_translate("Frame_main", "铝"))
         self.label_39.setText(_translate("Frame_main", "油"))
         self.label_40.setText(_translate("Frame_main", "支持模糊匹配，使用-隔离"))
-        self.groupBox_22.setTitle(_translate("Frame_main", "修理--未开放"))
-        self.cb_repair_2.setText(_translate("Frame_main", "自动修理开关"))
+        self.groupBox_22.setTitle(_translate("Frame_main", "泡澡"))
+        self.cb_repair_2.setText(_translate("Frame_main", "未定义"))
         self.cb_repair_time.setText(_translate("Frame_main", "超过"))
-        self.label_42.setText(_translate("Frame_main", "使用快修"))
-        self.bt_pay.setText(_translate("Frame_main", "支持作者"))
-
+        self.label_42.setText(_translate("Frame_main", "小时使用快修"))
