@@ -3,8 +3,7 @@
 
 ---
 
-<!-- 手机版地址: [点我传送](http://pe.protector.moe) -->
-
+手机版地址: [点我传送](https://github.com/bcxmzbcxm/pe-protector-moe)
 代挂机服务: [点我传送](http://cloud.protector.moe)
 
 ---
@@ -19,7 +18,7 @@
 提交bug时, 请附带以下信息:
 >* 软件版本号
 >* 出错功能
->* 软件自带日志
+>* **软件自带日志**
 >* 您的邮箱
 
 
