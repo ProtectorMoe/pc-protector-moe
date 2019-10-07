@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>180</width>
-    <height>153</height>
+    <width>187</width>
+    <height>174</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -145,9 +145,9 @@
   <widget class="QPushButton" name="bt_close">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>30</x>
      <y>120</y>
-     <width>161</width>
+     <width>141</width>
      <height>23</height>
     </rect>
    </property>
@@ -157,6 +157,19 @@
    <property name="icon">
     <iconset>
      <normaloff>icon/login.png</normaloff>icon/login.png</iconset>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>150</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>自动登录</string>
    </property>
   </widget>
  </widget>

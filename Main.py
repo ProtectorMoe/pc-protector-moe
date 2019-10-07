@@ -34,7 +34,6 @@ from Frame_add_pvp import *
 from Frame_add_campaign import *
 from Frame_count_ship import *
 from Frame_user_login import *
-from Frame_pay import *
 from Frame_select_ship import *
 from Frame_user_fleet import *
 from Frame_mine import *
@@ -52,6 +51,7 @@ class WindowsUserLogin(QDialog, Ui_Frame_user_login):
         self.password = ""
         self.server = 0
         self.bt_close.clicked.connect(self.close)
+        self.isauto=False
 
         self.ed_password.setEchoMode(QtWidgets.QLineEdit.Password)
         self.ed_username.setClearButtonEnabled(True)  # 设置清除
@@ -66,14 +66,24 @@ class WindowsUserLogin(QDialog, Ui_Frame_user_login):
                     self.ed_password.setText(user["password"])
                 if "server" in user:
                     self.cb_server.setCurrentIndex(int(user["server"]))
+                if "isauto" in user:
+                    self.checkBox.setChecked(user["isauto"])
+        if self.checkBox.isChecked():
+            threading.Thread(target=self.closesleep).start()
+
+    def closesleep(self):
+        time.sleep(5)
+        self.close()
 
     def closeEvent(self, *args, **kwargs):
         self.username = self.ed_username.text()
         self.password = self.ed_password.text()
         self.server = self.cb_server.currentIndex()
+        self.isauto=self.checkBox.isChecked()
         with open("config/user.json", "w") as f:
-            data = {"username": self.username, "password": self.password, "server": self.server}
+            data = {"username": self.username, "password": self.password, "server": self.server,"isauto":self.isauto}
             f.write(json.dumps(data))
+
 
 class WindowsLogin(QMainWindow, Ui_Frame_login):
     first_login_signal = pyqtSignal(dict)
@@ -92,7 +102,8 @@ class WindowsLogin(QMainWindow, Ui_Frame_login):
         self.first_finish = False
         self.second_finish = False
         self.is_sl_login = False
-
+        self.isauto=False
+        self.istart=0
         # 暂存数据
         self.server_list = []
 
@@ -143,27 +154,15 @@ class WindowsLogin(QMainWindow, Ui_Frame_login):
         """
         def th_get_pic():
             try:
-                name = "{}.jpg".format(str(random.randint(0, 55)))
+                name = "1.jpg"
                 if not os.path.exists("gamepaper"):
                     os.mkdir("gamepaper")
 
                 pic = QPixmap()
                 data = None
-                need_download = False
                 if os.path.exists("gamepaper/" + name):
                     with open("gamepaper/" + name, 'rb') as f:
                         data = f.read()
-                        if len(data) < 1024 * 100:
-                            need_download = True
-                else:
-                    need_download = True
-
-                if need_download:
-                    url = "http://www.simonkimi.top/gamepaper/" + name
-                    data = requests.get(url).content
-                    with open("gamepaper/" + name, 'wb') as f:
-                        f.write(data)
-
                 pic.loadFromData(data)
 
                 pic.scaled(380, 281)
@@ -178,7 +177,7 @@ class WindowsLogin(QMainWindow, Ui_Frame_login):
         try:
             self.show()
             self.cb_server.clear()
-            self.username, self.password, self.server = gameLogin.input_user_info()
+            self.username, self.password, self.server,self.isauto = gameLogin.input_user_info()
             # 开启子线程进行数据请求
             if len(self.username) != 0 and len(self.password) != 0:
                 gameData.login_name = self.username.upper()
@@ -213,6 +212,10 @@ class WindowsLogin(QMainWindow, Ui_Frame_login):
                 index += 1
             self.statusBarSignal.emit("登录成功,请选择服务器")
             self.first_finish = True
+            if self.isauto and self.istart==0:
+                self.istart+=1
+                time.sleep(2)
+                self.second_login()
             return True
         except Exception as e:
             log.error("第一次登录deal失败", str(e))
@@ -288,9 +291,11 @@ class GameLogin:
     # 读取用户输入帐号密码, 返回
     def input_user_info(self):
         w = WindowsUserLogin()
+        if w.checkBox.isChecked():
+            w.bt_close.setText("5秒后自动登录")
         if w.exec_():
             pass
-        return w.username, w.password, w.server
+        return w.username, w.password, w.server,w.isauto
 
     # 第一次登录,获取cookies和服务器列表
     def first_login_usual(self, server, username, pwd):
@@ -304,7 +309,7 @@ class GameLogin:
             url_version = ""
             if server == 0:  # 安卓服
                 url_version = 'http://version.jr.moefantasy.com/' \
-                              'index/checkVer/4.1.0/100016/2&version=4.1.0&channel=100016&market=2'
+                              'index/checkVer/4.5.0/100016/2&version=4.5.0&channel=100016&market=2'
                 self.res = 'http://login.jr.moefantasy.com/index/getInitConfigs/'
                 self.channel = "100016"
                 self.portHead = "881d3SlFucX5R5hE"
@@ -471,7 +476,7 @@ class GameLogin:
                     f.write(json.dumps(active_getUserData))
 
             url_cheat = host + 'pve/getUserData/' + self.get_url_end()
-            windows_login.statusBarSignal.emit("请用用户海域数据...")
+            windows_login.statusBarSignal.emit("请求用户海域数据...")
             pve_getUserData = json.loads(
                 zlib.decompress(session.get(url=url_cheat, headers=HEADER, cookies=self.cookies, timeout=10).content))
             if is_write and os.path.exists('requestsData'):
@@ -848,9 +853,9 @@ class WindowsAddBattle(QMainWindow, Ui_Frame_add_battle):
             if data is not None:
                 gameData.upgrade_fleet(data)
         except HmError as e:
-            QMessageBox.information(self, "护萌宝-编队-错误", e.message, QMessageBox.Yes)
+            QMessageBox.information(self, "护萌宝·Re-编队-错误", e.message, QMessageBox.Yes)
         except Exception as e:
-            QMessageBox.information(self, "护萌宝-编队-错误", str(e), QMessageBox.Yes)
+            QMessageBox.information(self, "护萌宝·Re-编队-错误", str(e), QMessageBox.Yes)
 
     def upgrade_fleet_list(self):
         self.cb_fleet.clear()
@@ -963,7 +968,7 @@ class WindowsMain(QMainWindow, Ui_Frame_main):
     def __init__(self):
         super(WindowsMain, self).__init__()
         self.setupUi(self)
-        self.setWindowTitle('护萌宝 Beta' + str(VERSION) + " 本软件永久免费, 任意售卖均未经许可")
+        self.setWindowTitle('护萌宝·Re' + str(VERSION) + " 本软件永久免费, 任意售卖均未经许可")
         self.menu_event()
         self.our_ship.connect(self.refresh_our_ship)
         self.foe_ship.connect(self.refresh_foe_ship_data)
@@ -1009,26 +1014,6 @@ class WindowsMain(QMainWindow, Ui_Frame_main):
         other_menu.addAction(action_other_equipment)
 
         # 关于页面
-        action_about_author = QAction('关于', self)
-        action_about_author.triggered.connect(lambda: QMessageBox.information(self, '护萌宝-关于',
-                                                                              '版本:Beta-' + str(VERSION)
-                                                                              + '\n作者: Simon菌'
-                                                                              + '\nQ'
-                                                                              + '\n本软件免费,任何售卖均未授权!', QMessageBox.Yes))
-        action_about_version = QAction('检测更新', self)
-        def c_u():
-            if not OtherFunction.check_upgrade():
-                QMessageBox.information(windows_main, "检测更新", "当前已是最新!", QMessageBox.Yes)
-
-        action_about_version.triggered.connect(c_u)
-
-        action_about_log = QAction('导出日志', self)
-        action_about_log.triggered.connect(lambda: OtherFunction.get_log(windows_main))
-
-        about_menu = self.menuBar.addMenu('帮助')
-        about_menu.addAction(action_about_author)
-        about_menu.addAction(action_about_version)
-        about_menu.addAction(action_about_log)
 
 
     def show_rw_detail(self):
@@ -1061,7 +1046,7 @@ class WindowsMain(QMainWindow, Ui_Frame_main):
                 if 'fleet' in data['data']:
                     fleet = data['data']['fleet']
                     d = ""
-                    if len(fleet) == 1:
+                    if len(str(fleet)) == 1:
                         d = "队伍: " + str(int(fleet) + 1)
                     else:
                         d = "队伍: " + windows_user_fleet.user_fleet[fleet]["name"] + ' → 队伍:' + str(
@@ -1254,6 +1239,8 @@ class WindowsCountShip(QMainWindow, Ui_Frame_count_ship):
 
     def add_ship(self, cid, access, path):
         self.count_list.append({'cid': cid, 'access': access, 'path': path, 'time': time.time()})
+        if len(self.count_list)>100:
+            del self.count_list[0]
         with open('count/ship.json', 'w') as f:
             f.write(json.dumps(self.count_list))
 
@@ -1294,12 +1281,13 @@ class WindowsMineShip(QMainWindow, Ui_FrameMine):
                 if cid > 20000000:
                     continue
                 types_list = ['其他', "航母", '轻母', '装母', '战列', '航战', '战巡', '重巡', '航巡', '雷巡',
-                              '轻巡', '重炮', '驱逐', '潜母', '潜艇', '炮潜', '补给', '导驱', '防驱']
+                              '轻巡', '重炮', '驱逐', '潜母', '潜艇', '炮潜', '补给', '', '','',
+                              '','','','导驱', '防驱','','导战']
                 country_list = {8: 'C国', 3: "E国", 6: "F国", 2: "G国", 5: "I国", 1: "J国", 7: "S国", 4: "U国"}
 
                 ship_name = ship['title']
-                ship_photo = "icon/photo/" + str(int(ship['shipIndex'])) + ".png"
-                ship_index = "No." + str(int(ship['shipIndex']))
+                ship_photo = "icon/photo/" + str(int(ship['picId'])) + ".png"
+                ship_index = "No." + str(int(ship['picId']))
                 ship_star = ship['star']
 
                 if ship['type'] < len(types_list):
@@ -1328,7 +1316,14 @@ class WindowsMineShip(QMainWindow, Ui_FrameMine):
                     continue
                 if not self.cb_count_6.isChecked() and ship_star == 6:
                     continue
-                if self.cb_type.currentIndex() != 0 and ship['type'] != self.cb_type.currentIndex():
+                current=self.cb_type.currentIndex()
+                ic=0
+                for curr in [17,18,19]:
+                    if  curr==current:
+                        current=[23,24,26][ic]
+                        break
+                    ic+=1   
+                if current != 0 and int(ship['type']) != current:
                     continue
                 if self.ed_name.text() != "" and self.ed_name.text() not in ship_name:
                     continue
@@ -1410,7 +1405,7 @@ class WindowsMineShip(QMainWindow, Ui_FrameMine):
             hp = init_data.ship_cid_wu[cid]['hp']
             speed = init_data.ship_cid_wu[cid]['speed']
             luck = init_data.ship_cid_wu[cid]['luck']
-            index = str(int(init_data.ship_cid_wu[cid]['shipIndex']))
+            index = str(int(init_data.ship_cid_wu[cid]['picId']))
             self.select_ship = index
 
             radar = init_data.ship_cid_wu[cid]['radar']
@@ -1494,31 +1489,6 @@ class WindowsMineShip(QMainWindow, Ui_FrameMine):
             webbrowser.open_new_tab(url)
 
 
-class WindowsPay(QMainWindow, Ui_Frame_pay):
-    def __init__(self):
-        super(WindowsPay, self).__init__()
-        self.setupUi(self)
-
-    def onShow(self):
-
-
-        try:
-            data = gameFunction.get_pay_icon()
-            wx_pay = QPixmap()
-            zfb_pay = QPixmap()
-            hb_pay = QPixmap()
-            wx_pay.loadFromData(data[0])
-            zfb_pay.loadFromData(data[1])
-            hb_pay.loadFromData(data[2])
-            wx_pay.scaled(211, 281)
-            zfb_pay.scaled(211, 281)
-            hb_pay.scaled(211, 281)
-            self.label.setPixmap(zfb_pay)
-            self.label_2.setPixmap(wx_pay)
-            self.label_4.setPixmap(hb_pay)
-            self.show()
-        except Exception as e:
-            log.error(e)
 
 
 class WindowsSelectShip(QDialog, Ui_Frame_select_ship):
@@ -1548,17 +1518,38 @@ class WindowsSelectShip(QDialog, Ui_Frame_select_ship):
         try:
             self.lt_all_ship.clear()
             self.ship.clear()
-            for ship, data in gameData.allShip.items():
-                if self.cb_type.currentIndex() != 0 and int(data['type']) != self.cb_type.currentIndex():
+            for ship, data in gameData.allShip.items():#17-23 18-24 19-26
+                current=self.cb_type.currentIndex()
+                ic=0
+                for curr in [17,18,19]:
+                    if  curr==current:
+                        current=[23,24,26][ic]
+                        break
+                    ic+=1   
+                if current != 0 and int(data['type']) != current:
                     continue
                 if self.cb_level.isChecked() is True:
                     if int(data['level']) > max(self.cb_level_max.value(), self.cb_level_min.value()) or int(data['level']) < min(
                             self.cb_level_max.value(), self.cb_level_min.value()):
                         continue
-                if self.ed_name.text() != "" and self.ed_name.text() not in data['title']:
+                if self.ed_name.text() != "" and self.ed_name.text() not in data['title'] and self.ed_name.text() not in init_data.ship_cid_wu[data['shipCid']]['title']:
                     continue
                 self.ship.append(int(ship))
                 ship_name = init_data.ship_cid_wu[data['shipCid']]['title'][: 4]
+                skillname="无技能"
+                skilldesc="无描述"
+                if  "skillId" in data:
+                    kill=init_data.init_data["shipSkil1"]
+                    for kin in kill:
+                        if kin["skillId"]==int(data["skillId"]):
+                            skillname=kin["title"]
+                            skilldesc=kin["phaseDesc"]+"-"+re.sub(pattern='\^C\S{16}', repl="", string=str(kin["desc"]))
+                            break
+
+
+
+
+
                 ship_level = 'Lv.' + str(data['level'])
                 ship_hp = str(data['battleProps']['hp']) + "/" + str(data['battlePropsMax']['hp'])
                 ship_fleet = '队伍:' + str(data['fleet_id'])
@@ -1566,7 +1557,7 @@ class WindowsSelectShip(QDialog, Ui_Frame_select_ship):
                     int(init_data.handbook_id[gameData.allShip[int(ship)]['shipCid']])) + ".png"
                 self.ship_signal.emit(
                     {'ship_name': ship_name, 'ship_level': ship_level, 'ship_hp': ship_hp,
-                     'ship_fleet': ship_fleet, 'ship_photo': ship_photo})
+                     'ship_fleet': ship_fleet, 'ship_photo': ship_photo,"skillname":skillname,"skilldesc":skilldesc})
         except Exception as e:
             print("Add select Error", e)
 
@@ -1604,6 +1595,8 @@ class WindowsSelectShip(QDialog, Ui_Frame_select_ship):
         ship_photo = data['ship_photo']
         ship_hp = data['ship_hp']
         ship_fleet = data['ship_fleet']
+        skillname = data['skillname']
+        skilldesc = data['skilldesc']
         # 创建页面
         wight = QWidget()
         # 头像显示
@@ -1628,6 +1621,7 @@ class WindowsSelectShip(QDialog, Ui_Frame_select_ship):
         # 添加显示
         ly_main.addLayout(ly_right)
         wight.setLayout(ly_main)
+        wight.setToolTip(skillname+":"+skilldesc)
         item = QListWidgetItem()
         item.setSizeHint(QSize(42, 45))
         self.lt_all_ship.addItem(item)
@@ -1922,7 +1916,7 @@ class RwFunction:
                      '601', '602', '603', '604',
                      '701', '702', '703', '704', '705',
                      '801',
-                     "9913", "9914", "9915", "9916", "9917", "9918", "9919", "9920", "9921", "9922"]
+                     "9401", "9402", "9403", "9404", "9405", "9406", "9407", "9408","9409","9410","9411","9412","9413","9414","9415","9416","9417","9418","9419","9420","9421","9422"]
         with open('path\\' + windows_rw.list_Rw.currentItem().text(), 'r') as file:
             self.config = file.read()
         self.config = json.loads(self.config)
@@ -1969,7 +1963,7 @@ class RwFunction:
                         '501', '502', '503', '504', '505',
                         '601', '602', '603', '604',
                         '701', '702', '703', '704', '705', '801',
-                        "9913", "9914", "9915", "9916", "9917", "9918", "9919", "9920", "9921", "9922"]
+                        "9401", "9402", "9403", "9404", "9405", "9406", "9407", "9408","9409","9410","9411","9412","9413","9414","9415","9416","9417","9418","9419","9420","9421","9422"]
             self.config['map'] = map_name[windows_rw.cb_map.currentIndex()]
             self.config['name'] = windows_rw.ed_name.text()
             self.config['point'] = windows_rw.ed_point.text()
@@ -2097,7 +2091,7 @@ class RwFunction:
                     '501.png', '502.png', '503.png', '504.png', '505.png',
                     '601.png', '602.png', '603.png', '604.png',
                     '701.png', '702.png', '703.png', '704.png', '705.png', '801.png',
-                    "9913.png", "9914.png", "9915.png", "9916.png", "9917.png", "9918.png", "9919.png", "9920.png", "9921.png", "9922.png"]
+                    "9401.png", "9402.png", "9403.png", "9404.png", "9405.png", "9406.png", "9407.png", "9408.png","9409.png","9410.png","9411.png","9412.png","9413.png","9414.png","9415.png","9416.png","9417.png","9418.png","9419.png","9420.png","9421.png","9422.png"]
         if windows_rw.cb_map.currentIndex() < len(map_name) and os.path.exists("icon/map/" + map_name[windows_rw.cb_map.currentIndex()]):
             png = QPixmap("icon/map/" + map_name[windows_rw.cb_map.currentIndex()])
             windows_rw.tv_map.setPixmap(png)
@@ -2218,17 +2212,22 @@ class BattleMain:
                 return False, '队伍不存在'
         self.config_name = config_name
         head = 'pve'
+        dealto='dealto'
         if self.login_config() is False:
             return False, '读取配置失败'
         try:
 
             # ---活动定义文件----
-            # if int(self.map) >= 1000:
-            #     ocean_data = gameData.get_ocean_data(node=self.map)
-            #     time.sleep(3)
-            #     gameData.get_ocean_level()
-            #     for node in ocean_data['nodeList']:
-            #         gameData.allPoint[int(node["id"])] = node
+            if int(self.map) >= 1000:
+                head = 'five'
+                dealto='deal'
+                ocean_data = gameData.get_ocean_data(node=self.map)
+                time.sleep(3)
+                gameData.get_ocean_level()
+                for node in ocean_data['fifth_level_node']:
+                    gameData.allPoint[int(node["id"])] = node
+                for node in ocean_data['fifth_level']:
+                    gameData.allLevel[int(node["id"])] = node
             # # ----港口页面----
             time.sleep(5)
             log.info('-=-=-=-=-=-=START=-=-=-=-=-=-')
@@ -2243,6 +2242,9 @@ class BattleMain:
             # 检测建造
             while other_function.check_build_ship():
                 pass
+            #检测泡澡
+            if windows_main.cb_free_shower.isChecked():
+                other_function.free_shower()
             # 检测上榜
             rank_data = other_function.check_rank(gameData.fleet[self.fleet])
             if windows_main.cb_rank.isChecked() is True:
@@ -2312,11 +2314,11 @@ class BattleMain:
             set_log('开始出征...', 1)
             other_function.refresh_our_ship_data(fleet=gameData.fleet[self.fleet], name=gameData.fleetName[self.fleet])
 
-            if int(self.map) >= 1000:
-                gameData.set_ocean_fleet(fleet=self.fleet + 1, node=self.map)
-                time.sleep(1)
+            #if int(self.map) >= 1000:
+               # gameData.set_ocean_fleet(fleet=self.fleet + 1, node=self.map)
+               # time.sleep(1)
 
-            battle_result = self.one_battle(head=head, other_data=other_data)
+            battle_result = self.one_battle(head=head, other_data=other_data,dealto=dealto)
             count.refresh_table()
             if battle_result is self.END_FINISH:  # 完成一次出征,返回true,并进行+1
                 log.info("Eed battle")
@@ -2338,7 +2340,7 @@ class BattleMain:
             raise
         set_log('任务结束...', 1)
 
-    def one_battle(self, head, other_data):
+    def one_battle(self, head, other_data,dealto):
         log.info('Start battle')
         is_last_point = False
         gameFunction.challenge_start(maps=self.map, team=int(self.fleet) + 1, head=head)  # battle加1
@@ -2526,8 +2528,8 @@ class BattleMain:
                 log.info("====Now at fight====")
                 log.info("Start fight", node, now_flag)
                 fight_data = gameFunction.challenge_fight(maps=node, team=self.fleet + 1, formats=now_format,
-                                                          head=head)
-                if node_type == 1 or node_type == 2:  # 正常出征，需要延迟
+                                                          head=head,dealto=dealto)
+                if node_type == 1 or node_type == 2 or node_type==7:  # 正常出征，需要延迟 7压制点
                     count.add_items(count.FIGHT_COUNT, 1)
                     random_time = other_function.ai_delay(fight_data['warReport'])
                     set_log("战斗延迟..." + str(random_time) + '秒', 1)
@@ -2585,8 +2587,12 @@ class BattleMain:
                 log.info("====Now at result====")
                 # 更新人物信息
                 log.info('Upgrade self information')
-                for each_war_ship in result_data['shipVO']:
-                    gameData.upgrade_ship(ids=each_war_ship['id'], jsons=each_war_ship)
+                if 'shipVO' in result_data:
+                    for each_war_ship in result_data['shipVO']:
+                        gameData.upgrade_ship(ids=each_war_ship['id'], jsons=each_war_ship)
+                if 'joyShipVo' in result_data:
+                    for each_war_ship in result_data['joyShipVo']:
+                        gameData.upgrade_ship(ids=each_war_ship['id'], jsons=each_war_ship)
                 # 更新任务信息
                 if 'updateTaskVo' in result_data:
                     log.info('Upgrade task information')
@@ -2603,7 +2609,10 @@ class BattleMain:
                 mvp_name = ''
                 for eachShip in result_data['warResult']['selfShipResults']:
                     if eachShip['isMvp'] == 1:
-                        mvp_name = gameData.allShip[gameData.fleet[self.fleet][num]]['title']
+                        if int(node)>941900:
+                            mvp_name=result_data["joyShipVo"][num]['title']
+                        else:
+                            mvp_name = gameData.allShip[gameData.fleet[self.fleet][num]]['title']
                     num += 1
                 # ----出船页面----
                 log.info("====Now at new ship====")
@@ -2663,9 +2672,14 @@ class BattleMain:
                 fleet_hp = []
                 fleet_max_hp = []
                 is_go = True
-                for fleet_member in result_data['shipVO']:
-                    fleet_hp.append(fleet_member['battleProps']['hp'])
-                    fleet_max_hp.append(fleet_member['battlePropsMax']['hp'])
+                if "shipVO" in result_data:
+                    for fleet_member in result_data['shipVO']:
+                        fleet_hp.append(fleet_member['battleProps']['hp'])
+                        fleet_max_hp.append(fleet_member['battlePropsMax']['hp'])
+                if "joyShipVo" in result_data:
+                    for fleet_member in result_data['joyShipVo']:
+                        fleet_hp.append(fleet_member['battleProps']['hp'])
+                        fleet_max_hp.append(fleet_member['battlePropsMax']['hp'])
                 fleet_four_hp = [int(hp * 4) for hp in fleet_hp]
                 for i in range(0, len(fleet_hp)):
                     if int(fleet_max_hp[i]) > int(fleet_four_hp[i]):
@@ -2820,8 +2834,13 @@ class BattleMain:
         have_ship = True
         if windows_main.cb_strengthen.isChecked() is True and len(config_function.qh_ship) != 0:
             num = 0
-            while len(config_function.qh_ship) != 0 and num < len(config_function.qh_ship) and have_ship is True:
+            while len(config_function.qh_ship) != 0 and num < len(config_function.qh_ship) and have_ship is True: #需要强化的船只循环
                 now_ship = config_function.qh_ship[num]
+                #删除远征船
+                if gameData.allShip[int(now_ship)]["fleetId"] in [5,6,7,8]:
+                    set_log("不能强化 处于远征队伍中 移除当前强化船只！！！",0)
+                    del config_function.qh_ship[0]
+                    continue  
                 ship_stuff = []
                 # 生成星级数据
                 accept_star = "123456"
@@ -2838,13 +2857,17 @@ class BattleMain:
                 def_max = init_data.ship_cid_wu[gameData.allShip[int(now_ship)]['shipCid']]['strengthenTop']['def']
                 # 获取已有数据
                 atk = gameData.allShip[int(now_ship)]['strengthenAttribute']['atk']
+                atk1 = gameData.allShip[int(now_ship)]['strengthenAttribute']['atk']
                 torpedo = gameData.allShip[int(now_ship)]['strengthenAttribute']['torpedo']
+                torpedo1 = gameData.allShip[int(now_ship)]['strengthenAttribute']['torpedo']
                 air_def = gameData.allShip[int(now_ship)]['strengthenAttribute']['air_def']
+                air_def1 = gameData.allShip[int(now_ship)]['strengthenAttribute']['air_def']
                 defence = gameData.allShip[int(now_ship)]['strengthenAttribute']['def']
+                defence1 = gameData.allShip[int(now_ship)]['strengthenAttribute']['def']
                 print(atk_max, atk, torpedo, torpedo_max, air_def, air_def_max, defence, def_max)
-                while atk < atk_max or torpedo < torpedo_max or air_def < air_def_max or defence < def_max:
+                while atk < atk_max or torpedo < torpedo_max or air_def < air_def_max or defence < def_max: #设置权重循环
                     ship_stuff_wait = []
-                    for ids, data in gameData.allShip.items():
+                    for ids, data in gameData.allShip.items(): #船坞循环
                         # 剔除数据
                         if ids in ship_stuff:  # 剔除已选数据
                             continue
@@ -2855,15 +2878,19 @@ class BattleMain:
                         if data['fleet_id'] != 0:  # 剔除在队伍的船只
                             continue
                         if windows_main.cb_s_unusualShip.isChecked() is True:
-                            if init_data.ship_cid_wu[data['shipCid']]['title'] in windows_main.ed_s_unusualShip.text():
+                            if  windows_main.ed_s_unusualShip.text() in init_data.ship_cid_wu[data['shipCid']]['title']:
                                 continue  # 反和谐名称
-                            if data['title'] in windows_main.ed_s_unusualShip.text():  # 和谐名称
+                            if windows_main.ed_s_unusualShip.text() in data['title']:  # 和谐名称
                                 continue
                             if "-" in windows_main.ed_s_unusualShip.text():
                                 unusual_ship = windows_main.ed_s_unusualShip.text().split("-")
+                                iscontinue=False
                                 for ship in unusual_ship:
                                     if ship in init_data.ship_cid_wu[data['shipCid']]['title'] or ship in data['title']:
-                                        continue
+                                        iscontinue=True
+                                        break #设置跳出条件为真
+                                if iscontinue:
+                                    continue
                         # --------计算权重----------
                         # 火力权重计算
                         atk_weight = 0
@@ -2895,7 +2922,7 @@ class BattleMain:
                         air_def_weight = 0
                         if air_def_max != 0 and air_def_max > air_def and windows_main.cb_s_a.isChecked() is True:
                             air_def_support = init_data.ship_cid_wu[data['shipCid']]['strengthenSupplyExp']['air_def']
-                            air_def_need = atk_max - air_def
+                            air_def_need = air_def_max - air_def
                             if air_def_support > air_def_need:  # 如果经验溢出
                                 air_def_weight = 1  # 权重设置为最大
                                 air_def_out = air_def_support - air_def_need  # 计算溢出经验值
@@ -2935,15 +2962,43 @@ class BattleMain:
                     else:
                         break
                 # 当前船只选择完成
-                if atk >= atk_max and defence >= def_max and torpedo >= torpedo_max and air_def >= air_def_max:
-                    set_log("完成强化:" + init_data.ship_cid_wu[gameData.allShip[int(now_ship)]['shipCid']]['title'], 0)
-                    del config_function.qh_ship[0]
+                  
+
+                if atk1 >= atk_max and defence1 >= def_max and torpedo1 >= torpedo_max and air_def1 >= air_def_max:
+                    set_log("尝试升级技能:" + init_data.ship_cid_wu[gameData.allShip[int(now_ship)]['shipCid']]['title'], 0)
+                    if "nextSkillId" not in gameData.allShip[int(now_ship)] or gameData.allShip[int(now_ship)]["nextSkillId"]==-1:
+                        set_log("不能进化 属性已经满 移除当前强化船只！！！",0)
+                        del config_function.qh_ship[0]
+                        continue
+                    else:
+                        #尝试升级
+                        dataf=gameFunction.skillLevelUp(now_ship)
+                        if 'eid' in dataf:
+                            if dataf["eid"]==-317 or dataf["eid"]==-315:
+                                set_log("移除当前强化船只！！！",0)
+                                del config_function.qh_ship[0]
+                                error_find(dataf)  
+                            else:
+                                set_log("升级失败 属性没有到达满值",0)
+                        else:
+                            set_log("升级成功",0)
+                            gameData.allShip[int(now_ship)]=dataf["shipVO"] 
+                            continue #重新计算权重                  
+                    
                 if len(ship_stuff) > 0:
                     stuff_name = [init_data.ship_cid_wu[gameData.allShip[int(x)]['shipCid']]['title'] for x in ship_stuff]
                     ship_name = init_data.ship_cid_wu[gameData.allShip[int(now_ship)]['shipCid']]['title']
-                    set_log("强化:" + ship_name + ' 使用' + str(len(ship_name)) + "个:" + " ".join(stuff_name), 0)
+                    set_log("强化:" + ship_name + ' 使用' + str(len(ship_stuff)) + "个:" + " ".join(stuff_name), 0)
                     time.sleep(2)
-                    gameFunction.strengthen(ids=now_ship, ship=ship_stuff)
+                    data= gameFunction.strengthen(ids=now_ship, ship=ship_stuff)
+                    if 'eid' in data:
+                        if data["eid"]==-412:
+                            set_log("移除当前强化船只！！！",0)
+                            del config_function.qh_ship[0]
+                            error_find(data)
+                    else:
+                        gameData.allShip[int(now_ship)]=data["shipVO"]                   
+
                     gameData.remove_ship(ship_stuff)
                 num += 1
 
@@ -3073,11 +3128,11 @@ class BattleMain:
                             ship_save_name = windows_main.ed_d_unusualShip.text().split('-')
                             for eachName in ship_save_name:
                                 for ship in dismantle_ship:
-                                    if eachName in init_data.ship_cid_wu[gameData.allShip[int(ship)]['shipCid']]['title']:
+                                    if eachName in init_data.ship_cid_wu[gameData.allShip[int(ship)]['shipCid']]['title'] or eachName in gameData.allShip[int(ship)]['title']:
                                         dismantle_ship.remove(str(ship))
                         else:
                             for ship in dismantle_ship:
-                                if windows_main.ed_d_unusualShip.text() in init_data.ship_cid_wu[gameData.allShip[int(ship)]['shipCid']]['title']:
+                                if windows_main.ed_d_unusualShip.text() in init_data.ship_cid_wu[gameData.allShip[int(ship)]['shipCid']]['title'] or windows_main.ed_d_unusualShip.text() in gameData.allShip[int(ship)]['title']:
                                     dismantle_ship.remove(str(ship))
 
                 if windows_main.cb_d_save.currentIndex() >= 1:  # 剔除6星
@@ -3142,6 +3197,7 @@ class BattleMain:
         # 第一步 更换船只
         log.info("Start change ship:", ship, fleet, path, data)
         new_ship = -1
+        old_ship=ship
         change_data = data['data']
         repair = data['rule']
         # 粗略匹配
@@ -3192,8 +3248,20 @@ class BattleMain:
                     # 排除本队
                     if ship in gameData.fleet[fleet]:
                         continue
+                    #排除相同的2号机
+                    typesame=False
+                    if gameData.allShip[ship]["shipCid"]!=gameData.allShip[old_ship]["shipCid"]:
+                        for fleetship in gameData.fleet[fleet]:
+                            if gameData.allShip[ship]["shipCid"]==gameData.allShip[fleetship]["shipCid"]:
+                                typesame=True
+                    if typesame:
+                        continue
+
                     # 检测是否在池子里
                     if ship not in gameData.allShip:
+                        continue
+                    #检测是否远征
+                    if gameData.allShip[ship]["fleetId"] in [5,6,7,8]:
                         continue
                     # 检测血量
                     ship_data = gameData.allShip[ship]
@@ -3217,45 +3285,53 @@ class BattleMain:
                         break
         log.debug("Change ship find", new_ship)
         if new_ship != -1:  # 有新船只了
-            log.info("Change ship", new_ship, ship)
+            log.info("Change ship", new_ship, old_ship)
             # 装备继承
+            
             change_ship_data = {}
             if change_data['equipment'] is True:
                 old_equipment = []
                 equipment_path = 0
-                if type(gameData.allShip[ship]['equipment']) == list:
-                    for equipment_cid in gameData.allShip[ship]['equipment']:
+                if type(gameData.allShip[old_ship]['equipmentArr']) == list:
+                    for equipment_cid in gameData.allShip[old_ship]['equipmentArr']:
                         if int(equipment_cid) == -1:
+                            equipment_path += 1
                             continue
-                        gameFunction.remove_equipment(ids=ship, path=equipment_path)
+                        #gameFunction.remove_equipment(ids=old_ship, path=equipment_path)
                         old_equipment.append(int(equipment_cid))
-                        log.info("Change equipment", ship, equipment_path)
-                        set_log("卸下装备:" + gameData.allShip[int(ship)]['title'] + '的' + str(equipment_path), 1)
+                        eq=BattleMain.getEquipment(int(equipment_cid))
+                        log.info("Change equipment", old_ship, str(equipment_path)+"→"+equipment_cid)
+                        set_log("卸下装备:" + gameData.allShip[int(old_ship)]['title'] + '的' + str(equipment_path)+"→"+eq["title"], 1)
                         equipment_path += 1
-                        time.sleep(3)
-                elif type(gameData.allShip[ship]['equipment']) == dict:
-                    for index, equipment_cid in gameData.allShip[ship]['equipment'].items():
+                        #time.sleep(3)
+                elif type(gameData.allShip[old_ship]['equipmentArr']) == dict:
+                    for index, equipment_cid in gameData.allShip[old_ship]['equipmentArr'].items():
                         if int(equipment_cid) == -1:
+                            equipment_path += 1
                             continue
-                        gameFunction.remove_equipment(ids=ship, path=equipment_path)
+                        #gameFunction.remove_equipment(ids=old_ship, path=equipment_path)
                         old_equipment.append(int(equipment_cid))
-                        log.info("Change equipment", ship, equipment_path)
-                        set_log("卸下装备:" + gameData.allShip[int(ship)]['title'] + '的' + str(equipment_path), 1)
+                        eq=BattleMain.getEquipment(int(equipment_cid))
+                        log.info("Change equipment", old_ship, str(equipment_path)+"→"+equipment_cid)
+                        set_log("卸下装备:" + gameData.allShip[int(old_ship)]['title'] + '的' + str(equipment_path)+"→"+eq["title"], 1)
                         equipment_path += 1
-                        time.sleep(3)
+                        #time.sleep(3)
 
                 if len(old_equipment) != 0:
                     for i in range(min(len(old_equipment),
                                        len(gameData.allShip[ship]['equipment0']))):
+                        gameFunction.remove_equipment(ids=old_ship, path=i)
+                        time.sleep(3)
                         gameFunction.change_equipment(ids=new_ship, cid=old_equipment[i], path=i)
-                        set_log("更换装备:" + gameData.allShip[int(new_ship)]['title'] + '的' + str(i), 1)
+                        eq=BattleMain.getEquipment(old_equipment[i])
+                        set_log("更换装备:" + gameData.allShip[int(new_ship)]['title'] + '的' + str(i)+"→"+eq["title"], 1)
                         time.sleep(3)
             # 更换船只
             change_ship_data = gameFunction.change_ship(fleet=fleet + 1, ids=new_ship, path=path)
             gameData.upgrade_fleet(change_ship_data)
             time.sleep(3)
             # 旧船进行维修
-            other_function.shower([ship], -1)
+            other_function.shower([old_ship], -1)
             return True, new_ship
         else:
             log.info("Change ship no find")
@@ -3269,6 +3345,15 @@ class BattleMain:
         if w.exec_():
             config_function.qh_ship = w.select_ship
         self.qh_upgrade_list()
+
+    @staticmethod
+    def getEquipment(cid):
+        shipEquipmnt= init_data.init_data["shipEquipmnt"]
+        for eq in shipEquipmnt:
+            if eq["cid"]==cid:
+                return eq
+        
+
 
     @staticmethod
     def qh_upgrade_list():
@@ -3430,57 +3515,109 @@ class PvpMain:
         self.night = False
         self.cv = False
         self.ss = False
+        self.pvp="pvp"
 
-    def main(self, team, formats, night, cv, ss):
+    def main(self, team, formats, night, cv, ss,pvp="pvp",friendlist=""):
         self.team = team + 1
         self.format = formats + 1
         self.night = night
         self.cv = cv
         self.ss = ss
-        log.debug('Refresh PVP list')
-        list_data = gameFunction.pvp_get_list()
-        self.upgrade_list(list_data)
+        self.pvp = pvp
+        self.friendlist = friendlist.replace(' ', '')
+        self.listfriend=[]
+        if pvp=="pvp":
+            
+            list_data = gameFunction.pvp_get_list #演习对手列表
+            self.upgrade_list(list_data)
+        else:
+            
+            if len(self.friendlist)==0:
+                return False
+            self.friendlist=self.friendlist.split(',')
+            if len(self.friendlist)==0:
+                return False
+            num=0
+            for x in self.friendlist:
+                self.listfriend.append(x)
+                num+=1
+                if num>=3:
+                    break
+            if len(self.listfriend)==0:
+                return False                      
+                        
+            list_data = gameFunction.friend_get_list #演习好友对手列表 
+        log.debug('Refresh {pvp} list'.format(pvp=pvp))
+        
         fight_td = []  # 0uid, 1user_name, 2fleet_name
         other_function.refresh_our_ship_data(fleet=gameData.fleet[self.team - 1],
                                              name=gameData.fleetName[self.team - 1])
-        log.debug('Start PVP')
+        log.debug('Start {pvp}'.format(pvp=pvp))
         try:
-            for each_td in list_data['list']:
-                if each_td['resultLevel'] == 0:
-                    fight_td.append([each_td['uid'], each_td['username'], each_td['fleetName']])
+            if pvp=="pvp":
+                for each_td in list_data['list']:
+                    if each_td['resultLevel'] == 0:
+                        fight_td.append([each_td['uid'], each_td['username'], each_td['fleetName']])
+
+            else:
+                for each_td in list_data["list"]:
+                    if  each_td['uid'] not in self.listfriend:
+                        continue
+                    resultfriend=gameFunction.friend_visitorFriend(each_td['uid'])
+                    if resultfriend['challengeScore']==0:
+
+                        fight_td.append([each_td['uid'], each_td['username'], each_td['sign']])
+
             if len(fight_td) == 0:
                 return False
             # 开始索敌
             fight_td = fight_td[0]
-            log.info('PVP spy...')
-            set_log('演习...索敌...', 1)
-            spy_data = gameFunction.pvp_spy(uid=fight_td[0], fleet=self.team)
+            log.info('{pvp} spy...'.format(pvp=pvp))
+            set_log('{pvp}演习...索敌...'.format(pvp=pvp), 1)
+            spy_data = gameFunction.pvp_spy(uid=fight_td[0], fleet=self.team,pvp=pvp)
             other_function.refresh_foe_ship_data(spy_data['enemyVO']['enemyShips'])
             time.sleep(2)
             # 开始战斗
             random_time = random.randint(15, 30)
-            log.info('PVP fight...wait', random_time, '秒')
-            set_log('演习开始战斗,等待...' + str(random_time) + "秒", 1)
-            fight_data = gameFunction.pvp_fight(uid=fight_td[0], fleet=self.team, formats=self.format)
+            log.info('{pvp} fight...wait'.format(pvp=pvp), random_time, '秒')
+            set_log('{pvp}演习开始战斗,等待...'.format(pvp=pvp) + str(random_time) + "秒", 1)
+            fight_data = gameFunction.pvp_fight(uid=fight_td[0], fleet=self.team, formats=self.format,pvp=pvp)
             time.sleep(random_time)
             # 进行夜战
             if fight_data['warReport']['canDoNightWar'] == 1 and self.night is True:
-                log.info('PVP night fight...')
-                set_log('演习...夜战...', 1)
-                result_data = gameFunction.pvp_get_result(is_night_fight=1)
+                log.info(pvp+' night fight...')
+                set_log('{pvp}演习...夜战...'.format(pvp=pvp), 1)
+                result_data = gameFunction.pvp_get_result(is_night_fight=1,pvp=pvp)
                 time.sleep(random_time)
             else:
-                result_data = gameFunction.pvp_get_result(is_night_fight=0)
+                result_data = gameFunction.pvp_get_result(is_night_fight=0,pvp=pvp)
             # 进行结算
             windows_main.lt_our_2.clear()
             pj = ['-', 'SS', 'S', 'A', 'B', 'C', 'D']
             set_log(
-                '演习..' + str(fight_td[1]) + '-' + str(fight_td[2]) + '--' + pj[result_data['warResult']['resultLevel']],
+                '{pvp}演习..'.format(pvp=pvp) + str(fight_td[1]) + '-' + str(fight_td[2]) + '--' + pj[result_data['warResult']['resultLevel']],
                 0)
-            log.info('PVP',
+            log.info(pvp,
                         str(fight_td[1]) + '-' + str(fight_td[2]) + '--' + pj[result_data['warResult']['resultLevel']])
         except Exception as e:
-            log.error('PVP ERROR:', str(e))
+            log.error(pvp+' ERROR:', str(e))
+            raise
+
+    @staticmethod
+    def upgrade_friend_list(data):
+        try:
+            num=0
+            friendstrs=""
+            for user in data['list']:
+                friendstrs+=user['uid']+','
+                num+=1
+                if num>=3:
+                    friendstrs=friendstrs.rstrip(',')
+                    break
+            windows_add_pvp.friendlist.setText(friendstrs)
+
+        except Exception as e:
+            log.error('Upgrade friend list ERROR:', str(e))
             raise
 
     @staticmethod
@@ -3495,8 +3632,7 @@ class PvpMain:
                 user_pj = "评价:" + pj[user['resultLevel']]
                 user_ship = []
                 for ship in user['ships']:
-
-                    ship_cid = ship['shipCid']
+                    ship_cid = ship['shipCid']#演习不能打开
                     ship_data = init_data.ship_cid_wu[ship_cid]
                     ship_path = ""
                     if "shipIndex" in ship_data:
@@ -3530,6 +3666,10 @@ class OtherFunction:
         for ship in ships:
             if ship not in gameData.allShip:
                 return False, "船只不存在"
+        #检测船只是否正在远征
+        for ship in ships:
+            if gameData.allShip[ship]["fleetId"] in [5,6,7,8]:
+                return False, "船只正在远征队伍中"
         # 循环检测添加船只进入列表
 
         index = 0
@@ -3556,6 +3696,19 @@ class OtherFunction:
                 time.sleep(2)
             elif int(s[i]) != int(n[i]) and int(s[i]) != -1:
                 is_operate = True
+                #移除相同类型的船只
+                fi=0
+                for fship in gameData.fleet[fleet]:
+                    if gameData.allShip[s[i]]["shipCid"]==gameData.allShip[fship]["shipCid"]:
+                        data = gameFunction.remove_ship(fleet=fleet + 1, path=fi)
+                        gameData.fleet[fleet] = data["fleetVo"][0]["ships"]
+                        time.sleep(2)
+                        fi+=1
+                        continue
+                    fi+=1
+                
+
+
                 data = gameFunction.change_ship(fleet=fleet + 1, ids=s[i], path=i)
                 gameData.fleet[fleet] = data["fleetVo"][0]["ships"]
                 time.sleep(2)
@@ -3570,7 +3723,7 @@ class OtherFunction:
     @staticmethod
     def show_mine(windows):
         try:
-            QMessageBox.information(windows, '护萌宝-我的',
+            QMessageBox.information(windows, '护萌宝·Re-我的',
                                     "等级:" + str(gameData.userDetail["level"])
                                     + "\n经验:" + str(gameData.userDetail["exp"])
                                     + "\n距离下一级:" + str(gameData.userDetail["lastLevelExpNeed"])
@@ -3601,7 +3754,7 @@ class OtherFunction:
     @staticmethod
     def get_log(windows):
         log.get_log()
-        QMessageBox.information(windows, "护萌宝", "已将日志输出至桌面!", QMessageBox.Yes)
+        QMessageBox.information(windows, "护萌宝·Re", "已将日志输出至桌面!", QMessageBox.Yes)
 
     @staticmethod
     def show_mine_collection():
@@ -3643,10 +3796,29 @@ class OtherFunction:
                         repair_data = gameFunction.rubdown(ship=wait_shower[0])
                         set_log(
                             "搓澡船只:" + init_data.ship_cid_wu[gameData.allShip[wait_shower[0]]["shipCid"]]['title'], 1)
+
                         del wait_shower[0]
         if repair_data != {}:
             if 'repairDockVo' in repair_data:
                 gameData.repairDock = repair_data['repairDockVo']
+        
+        limit_time="" 
+        if windows_main.cb_repair_time.isChecked():
+
+            limit_time=windows_main.ed_repair_time.text()
+            if  limit_time!=0:
+                # 检查是否有超时的
+                for dock in gameData.repairDock:
+                    if 'endTime' in dock:
+                        if limit_time != -1 and float(limit_time) * 60 * 60 < dock['endTime'] - time.time():
+                            repair_data = gameFunction.repair([dock['shipId']])
+                            set_log(
+                            "超过设定时间["+limit_time+"]快修船只:" + gameData.allShip[int(dock['shipId'])]['title'], 0)
+                            time.sleep(3)
+        if repair_data != {}:
+            if 'repairDockVo' in repair_data:
+                gameData.repairDock = repair_data['repairDockVo']
+
 
     @staticmethod
     def repair_complete():
@@ -3709,7 +3881,7 @@ class OtherFunction:
     @staticmethod
     def dismantle_equipment(item):
         if item == 0:
-            rep = QMessageBox.question(windows_main, '护萌宝', '将会自动分解三星以下的装备\n请提前上锁重要装备\n如:绿声呐,绿投弹\n是否继续?', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+            rep = QMessageBox.question(windows_main, '护萌宝·Re', '将会自动分解三星以下的装备\n请提前上锁重要装备\n如:绿声呐,绿投弹\n是否继续?', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
             if rep == QMessageBox.Yes:
                 th_main.classical_list.insert(0, {'name': "分解低级装备", 'type': 4, 'num': 0, 'num_max': 0, 'data': {}})
                 th_main.upgrade_list()
@@ -3920,28 +4092,7 @@ class OtherFunction:
             log.error('Upgrade start fleet ERROR:', str(e))
             raise
 
-    @staticmethod
-    def check_upgrade():
-        """
-        功能:检测脚本更新
-        :return:
-        """
-        gameData.get_mine_version()
-        if "notice" in gameData.mine:
-            QMessageBox.information(windows_main, "公告", gameData.mine["notice"], QMessageBox.Yes)
-        if 'version' in gameData.mine:
-            if gameData.mine['build_version'] > BUILD_VERSION:  # 版本过期
-                speak = f"""发现新版本\n版本号{gameData.mine['version']}\n更新说明{gameData.mine['description']}"""
-                reply = QMessageBox.question(windows_main, '护萌宝', speak, QMessageBox.Yes | QMessageBox.No,
-                                             QMessageBox.Yes)
-                if reply == QMessageBox.Yes:
-                    webbrowser.open("https://github.com/bcxmzbcxm/pc-protector-moe/releases")
 
-            else:
-                return False
-        else:
-            QMessageBox.critical(windows_main, '护萌宝', "无法连接更新服务器!", QMessageBox.Yes,
-                                 QMessageBox.Yes)
 
 
     @staticmethod
@@ -4069,7 +4220,7 @@ class OtherFunction:
     @staticmethod
     def change_name(item):
         if item == 0:
-            rep = QMessageBox.question(windows_main, '护萌宝', '名称反和谐是利用游戏自带改名\n将动物园改为正常名称\n根据船只多少可能花费数分钟\n是否继续?', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+            rep = QMessageBox.question(windows_main, '护萌宝·Re', '名称反和谐是利用游戏自带改名\n将动物园改为正常名称\n根据船只多少可能花费数分钟\n是否继续?', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
             if rep == QMessageBox.Yes:
                 th_main.classical_list.insert(0, {'name': "改名", 'type': 3, 'num': 0, 'num_max': 0, 'data': {}})
                 th_main.upgrade_list()
@@ -4185,12 +4336,13 @@ class ThMain:
                 set_log(e.message, 0)
                 log.error(e.message)
                 if e.code == -9995:  # 登录失效
-                    set_log('登录失效,重新登录游戏', 3)
+                    set_log('登录失效,'+windows_main.RelineEdit.text()+'秒后重新登录游戏', 3)
                     self.login_fin += 1
-                    if self.login_fin >= 10:
+                    if self.login_fin < 0:
                         log.cri("登录失效次数达到上限,无法继续")
                         set_log("登录失效次数达到上限,无法继续", 3)
                         break
+                    time.sleep(int(windows_main.RelineEdit.text()))
                     other_function.re_login()
                 elif e.code == -102 or e.code == -105 or e.code == -106 or e.code == -107 or e.code == -108:
                     set_log('资源不足,终止任务', 3)
@@ -4281,6 +4433,16 @@ class ThMain:
                                 'data': each_timer['data']
                             }
                             self.classical_list.insert(0, classical)
+                        elif each_timer['type'] == 5:
+                            # 好友演习
+                            classical = {
+                                'name': each_timer['name'],
+                                'num': 0,
+                                'num_max': 3,
+                                'type': 5,
+                                'data': each_timer['data']
+                            }
+                            self.classical_list.insert(0, classical)       
                 if len(time_change) != 0:
                     for each_timer_change in time_change:
                         self.timer_list[each_timer_change]['last_time'] = now_time.day
@@ -4343,6 +4505,8 @@ class ThMain:
                         continue
                     # 开始出征
                     battle_result, reason = battle_main.main(config_name=now_rw['name'], fleet=str(now_rw['data']['fleet']), repair=now_rw['data']['repair_data'], other_data=now_rw['data']['other_data'])
+                    if  len(self.classical_list)==0: #判断是否存在经典任务 
+                        continue
                     if battle_result is False:
                         set_log('任务1完成,原因:' + reason, 0)
                         log.info("Del battle task")
@@ -4365,11 +4529,17 @@ class ThMain:
                     config = now_rw['data']
                     battle_result = pvp_main.main(formats=config['format'], team=config['fleet'], night=config['night'],
                                                   cv=config['cv'], ss=config['ss'])
+                    if  len(self.classical_list)==0: #判断是否存在经典任务 
+                        continue
                     if battle_result is False:
                         del self.classical_list[index]
                         self.list_save()
                         self.upgrade_list()
                         continue
+                    elif battle_result is True:
+                        self.classical_list[index]['num'] += 1
+                        self.list_save()
+                        self.upgrade_list()
                 elif now_rw['type'] == 2:  # 战役任务
                     if now_rw['num'] >= now_rw['num_max']:  # 超过出征计划
                         log.info("Del battle task")
@@ -4380,6 +4550,8 @@ class ThMain:
                     config = now_rw['data']
                     battle_result = campaign_main.main(maps=config['map'], formats=config['format'],
                                                        night=config['night'], repair=config['repair'], sl=config["sl"])
+                    if  len(self.classical_list)==0: #判断是否存在经典任务 
+                        continue                                                       
                     if battle_result is False:
                         del self.classical_list[index]
                         self.list_save()
@@ -4400,6 +4572,25 @@ class ThMain:
                     del self.classical_list[index]
                     self.list_save()
                     self.upgrade_list()
+                elif now_rw['type'] == 5: #好友演习
+                    config = now_rw['data']
+                    battle_result = pvp_main.main(formats=config['format'], team=config['fleet'], night=config['night'],
+                                                  cv=config['cv'], ss=config['ss'],pvp="friend",friendlist=config['friendlist'])
+                    if  len(self.classical_list)==0: #判断是否存在经典任务 
+                        continue                                                  
+                    if battle_result is False:
+                        del self.classical_list[index]
+                        self.list_save()
+                        self.upgrade_list()
+                        continue
+                    elif battle_result is True:
+                        self.classical_list[index]['num'] += 1
+                        self.list_save()
+                        self.upgrade_list()
+
+
+
+
             else:
                 # 远征任务
                 windows_main.tv_nowrw.setText(gameFunction.set_text_size(9, '没事可做(空闲模式)...'))
@@ -4559,7 +4750,10 @@ class ThMain:
                 log.info('Add PVP task 0')
                 self.rw_tmp = [1, '演习']
                 other_function.upgrade_add_pvp_fleet(gameData.fleet[0])
-                pvp_main.upgrade_list(gameFunction.pvp_get_list())
+                datapvp=gameFunction.pvp_get_list #常规演习
+                pvp_main.upgrade_list(gameFunction.pvp_get_list)
+                datafriend=gameFunction.friend_get_list #好友演习
+                pvp_main.upgrade_friend_list(datafriend)
                 windows_add_pvp.rb_classical.setChecked(True)
                 windows_add_pvp.show()
             elif item == 1:
@@ -4567,22 +4761,30 @@ class ThMain:
                 windows_add_pvp.close()
                 # classical [0name, 1type, 2num, 3num_max, 4data]
                 # timer [0name, 1type, 2time, 3last_time, 4num, 5num_max, 6data]
-                # type  0:经典 1:演习 2:战役
+                # type  0:经典 1:演习 2:战役 5:好友演习
                 if windows_add_pvp.rb_classical.isChecked() is True:
+                    
                     # 经典任务
                     classical = {
-                                 'name': "演习",
-                                 'type': 1,
-                                 'num': 0,
-                                 'num_max': 5,
-                                 'data': {
-                                          'fleet': windows_add_pvp.cb_fleet.currentIndex(),
-                                          'format': windows_add_pvp.cb_pvp_format.currentIndex(),
-                                          'night': windows_add_pvp.cb_pvp_night.isChecked(),
-                                          'cv': windows_add_pvp.cb_pvp_cv.isChecked(),
-                                          'ss': windows_add_pvp.cb_pvp_ss.isChecked()
-                                          }
-                                 }
+                                'name': "演习",
+                                'type': 1,
+                                'num': 0,
+                                'num_max': 5,
+                                'data': {
+                                        'fleet': windows_add_pvp.cb_fleet.currentIndex(),
+                                        'format': windows_add_pvp.cb_pvp_format.currentIndex(),
+                                        'night': windows_add_pvp.cb_pvp_night.isChecked(),
+                                        'cv': windows_add_pvp.cb_pvp_cv.isChecked(),
+                                        'ss': windows_add_pvp.cb_pvp_ss.isChecked(),
+                                        'friendlist':windows_add_pvp.friendlist.text()
+                                        }
+                                }                   
+                    if windows_add_pvp.friendcheck.isChecked():
+                        classical['name']="好友演习"
+                        classical['type']=5
+                        classical['num_max']=3
+
+                                
                     self.classical_list.append(classical)
                 else:
                     timer = {
@@ -4596,9 +4798,14 @@ class ThMain:
                                       'format': windows_add_pvp.cb_pvp_format.currentIndex(),
                                       'night': windows_add_pvp.cb_pvp_night.isChecked(),
                                       'cv': windows_add_pvp.cb_pvp_cv.isChecked(),
-                                      'ss': windows_add_pvp.cb_pvp_ss.isChecked()
+                                      'ss': windows_add_pvp.cb_pvp_ss.isChecked(),
+                                      'friendlist':windows_add_pvp.friendlist.text()
                                       }
                              }
+                    if windows_add_pvp.friendcheck.isChecked():
+                        timer['name']="好友演习"
+                        timer['type']=5
+                        timer['num_max']=3
                     self.timer_list.append(timer)
                 self.list_save()
                 self.upgrade_list()
@@ -4713,7 +4920,7 @@ class ConfigFunction:
         self.main_3_read()
         self.main_build_read()
         self.main_other_read()
-        self.active_read()
+        #self.active_read()
         log.info("Read main config finish")
 
     def main_other_save(self):
@@ -4742,7 +4949,9 @@ class ConfigFunction:
         self.main_1['cb_s_unusualShip'] = windows_main.cb_s_unusualShip.isChecked()
         self.main_1['cb_s_save'] = windows_main.cb_s_save.currentIndex()
         self.main_1['ed_s_unusualShip'] = windows_main.ed_s_unusualShip.text()
-
+        #修理条件
+        self.main_1['ed_repair_time'] = windows_main.ed_repair_time.value()
+        self.main_1['cb_repair_time'] = windows_main.cb_repair_time.isChecked()
         with open('config\\main1.json', 'w') as file:
             file.write(json.dumps(self.main_1))
 
@@ -4776,6 +4985,8 @@ class ConfigFunction:
         self.main_build['ed_build_unusual'] = windows_main.ed_build_unusual.text()
         self.main_build['cb_build_time'] = windows_main.cb_build_time.isChecked()
         self.main_build['ed_time'] = windows_main.ed_time.value()
+
+
         with open('config\\build.json', 'w') as file:
             file.write(json.dumps(self.main_build))
 
@@ -4804,6 +5015,11 @@ class ConfigFunction:
                     windows_main.cb_s_save.setCurrentIndex(self.main_1['cb_s_save'])
                 if 'ed_s_unusualShip' in self.main_1:
                     windows_main.ed_s_unusualShip.setText(self.main_1['ed_s_unusualShip'])
+                #修理条件
+                if 'ed_repair_time' in self.main_1:
+                    windows_main.ed_repair_time.setValue(self.main_1['ed_repair_time'])
+                if 'cb_repair_time' in self.main_1:
+                    windows_main.cb_repair_time.setChecked(self.main_1['cb_repair_time'])
 
             except Exception as e:
                 log.error('Main 1 read Error', str(e))
@@ -4880,23 +5096,23 @@ class ConfigFunction:
                 log.error('Main other read Error', str(e))
                 raise
 
-    def active_read(self):
-        if os.path.exists('config\\active_code.json'):
-            try:
-                with open('config\\active_code.json', 'r') as file:
-                    self.active_code = json.loads(file.read())
-            except Exception as e:
-                log.error('读取激活码失败', str(e))
-                raise
+    # def active_read(self):
+    #     if os.path.exists('config\\active_code.json'):
+    #         try:
+    #             with open('config\\active_code.json', 'r') as file:
+    #                 self.active_code = json.loads(file.read())
+    #         except Exception as e:
+    #             log.error('读取激活码失败', str(e))
+    #             raise
 
-    def active_write(self, username, code):
-        try:
-            with open('config\\active_code.json', 'w') as file:
-                self.active_code[username] = code
-                file.write(json.dumps(self.active_code))
-        except Exception as e:
-            log.error('写入激活码失败', str(e))
-            raise
+    # def active_write(self, username, code):
+    #     try:
+    #         with open('config\\active_code.json', 'w') as file:
+    #             self.active_code[username] = code
+    #             file.write(json.dumps(self.active_code))
+    #     except Exception as e:
+    #         log.error('写入激活码失败', str(e))
+    #         raise
 
 
 class Count:
@@ -5088,7 +5304,7 @@ def login():
         log.error('Login Error:', e.message)
         return 0
     except Exception as e:
-        QMessageBox.warning(windows_login, '错误', "脚本初始化失败\n错误代码:%s\n" % str(e), QMessageBox.Yes)
+        QMessageBox.warning(windows_login, '错误', "脚本初始化失败\n错误代码:%s\n请阅读群公告内解决方案" % str(e), QMessageBox.Yes)
         log.error('Login Error:', str(e))
         return 0
 
@@ -5125,7 +5341,6 @@ def login_windows():
     windows_main.bt_rw_up.clicked.connect(th_main.list_change)  # 任务上移
     windows_main.bt_rw_del.clicked.connect(th_main.list_del)
 
-    windows_main.bt_pay.clicked.connect(pay.onShow)
 
     windows_main.bt_getLog.clicked.connect(lambda: OtherFunction.get_log(windows_main))
 
@@ -5170,7 +5385,6 @@ def login_windows():
 
     windows_add_battle.bt_SetRw.clicked.connect(rw_function.show_rw)
     # -------这里插入配置事件------------
-    other_function.check_upgrade()
     windows_login.first_login()
     # -------------------------------------
 
@@ -5183,7 +5397,6 @@ log.windows = windows_main
 windows_rw = WindowsRw()
 windows_count_ship = WindowsCountShip()
 windows_mine = WindowsMineShip()
-pay = WindowsPay()
 th_main = ThMain()
 other_function = OtherFunction()
 windows_user_fleet = WindowsUserFleet()

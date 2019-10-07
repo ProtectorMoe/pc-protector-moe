@@ -298,7 +298,32 @@
      </item>
      <item>
       <property name="text">
+       <string>Ex-1-1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-1-2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Ex-2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-2-1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-2-2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-2-3</string>
       </property>
      </item>
      <item>
@@ -308,7 +333,52 @@
      </item>
      <item>
       <property name="text">
+       <string>Ex-3-1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-3-2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-3-3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-3-4</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Ex-4</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-4-1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-4-2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-4-3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-4-4</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ex-4-5</string>
       </property>
      </item>
      <item>
@@ -329,16 +399,6 @@
      <item>
       <property name="text">
        <string>Ex-8</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Ex-9</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Ex-10</string>
       </property>
      </item>
     </widget>
@@ -378,7 +438,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>../../Users/Hasee/.designer/backup/icon/map26.png</pixmap>
+      <pixmap>../Users/Hasee/.designer/backup/icon/map26.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>

@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'Frame_add_pvp.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Frame_add_pvp(object):
     def setupUi(self, Frame_add_pvp):
@@ -59,6 +61,12 @@ class Ui_Frame_add_pvp(object):
         self.lt_fleet = QtWidgets.QListWidget(self.groupBox_17)
         self.lt_fleet.setGeometry(QtCore.QRect(10, 50, 161, 141))
         self.lt_fleet.setObjectName("lt_fleet")
+        self.label = QtWidgets.QLabel(self.groupBox_17)
+        self.label.setGeometry(QtCore.QRect(20, 360, 131, 71))
+        self.label.setTextFormat(QtCore.Qt.PlainText)
+        self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.label.setWordWrap(True)
+        self.label.setObjectName("label")
         self.rb_timer = QtWidgets.QRadioButton(self.centralwidget)
         self.rb_timer.setGeometry(QtCore.QRect(140, 10, 115, 19))
         self.rb_timer.setObjectName("rb_timer")
@@ -79,6 +87,12 @@ class Ui_Frame_add_pvp(object):
         self.te_time_hour.setGeometry(QtCore.QRect(320, 10, 42, 22))
         self.te_time_hour.setMaximum(23)
         self.te_time_hour.setObjectName("te_time_hour")
+        self.friendcheck = QtWidgets.QCheckBox(self.centralwidget)
+        self.friendcheck.setGeometry(QtCore.QRect(430, 10, 71, 16))
+        self.friendcheck.setObjectName("friendcheck")
+        self.friendlist = QtWidgets.QLineEdit(self.centralwidget)
+        self.friendlist.setGeometry(QtCore.QRect(510, 10, 211, 20))
+        self.friendlist.setObjectName("friendlist")
         Frame_add_pvp.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(Frame_add_pvp)
@@ -104,7 +118,8 @@ class Ui_Frame_add_pvp(object):
         self.cb_fleet.setItemText(1, _translate("Frame_add_pvp", "二队"))
         self.cb_fleet.setItemText(2, _translate("Frame_add_pvp", "三队"))
         self.cb_fleet.setItemText(3, _translate("Frame_add_pvp", "四队"))
+        self.label.setText(_translate("Frame_add_pvp", "默认取前3个好友的uid 可以自己设置好友的uid 勾选好友演习复选框即可设置好友演习"))
         self.rb_timer.setText(_translate("Frame_add_pvp", "作为定时任务"))
         self.groupBox.setTitle(_translate("Frame_add_pvp", "对手"))
         self.label_13.setText(_translate("Frame_add_pvp", " :"))
-
+        self.friendcheck.setText(_translate("Frame_add_pvp", "好友演习"))

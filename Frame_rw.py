@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'Frame_rw.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Frame_Rw(object):
     def setupUi(self, Frame_Rw):
@@ -97,6 +99,18 @@ class Ui_Frame_Rw(object):
         self.cb_map.addItem("")
         self.cb_map.addItem("")
         self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
+        self.cb_map.addItem("")
         self.label_3 = QtWidgets.QLabel(self.groupBox)
         self.label_3.setGeometry(QtCore.QRect(170, 10, 72, 21))
         self.label_3.setObjectName("label_3")
@@ -106,7 +120,7 @@ class Ui_Frame_Rw(object):
         self.tv_map = QtWidgets.QLabel(self.groupBox)
         self.tv_map.setGeometry(QtCore.QRect(10, 40, 411, 221))
         self.tv_map.setText("")
-        self.tv_map.setPixmap(QtGui.QPixmap("../../Users/Hasee/.designer/backup/icon/map26.png"))
+        self.tv_map.setPixmap(QtGui.QPixmap("../Users/Hasee/.designer/backup/icon/map26.png"))
         self.tv_map.setScaledContents(True)
         self.tv_map.setObjectName("tv_map")
         self.label_5 = QtWidgets.QLabel(self.groupBox)
@@ -269,15 +283,27 @@ class Ui_Frame_Rw(object):
         self.cb_map.setItemText(31, _translate("Frame_Rw", "7-5"))
         self.cb_map.setItemText(32, _translate("Frame_Rw", "8-1"))
         self.cb_map.setItemText(33, _translate("Frame_Rw", "Ex-1"))
-        self.cb_map.setItemText(34, _translate("Frame_Rw", "Ex-2"))
-        self.cb_map.setItemText(35, _translate("Frame_Rw", "Ex-3"))
-        self.cb_map.setItemText(36, _translate("Frame_Rw", "Ex-4"))
-        self.cb_map.setItemText(37, _translate("Frame_Rw", "Ex-5"))
-        self.cb_map.setItemText(38, _translate("Frame_Rw", "Ex-6"))
-        self.cb_map.setItemText(39, _translate("Frame_Rw", "Ex-7"))
-        self.cb_map.setItemText(40, _translate("Frame_Rw", "Ex-8"))
-        self.cb_map.setItemText(41, _translate("Frame_Rw", "Ex-9"))
-        self.cb_map.setItemText(42, _translate("Frame_Rw", "Ex-10"))
+        self.cb_map.setItemText(34, _translate("Frame_Rw", "Ex-1-1"))
+        self.cb_map.setItemText(35, _translate("Frame_Rw", "Ex-1-2"))
+        self.cb_map.setItemText(36, _translate("Frame_Rw", "Ex-2"))
+        self.cb_map.setItemText(37, _translate("Frame_Rw", "Ex-2-1"))
+        self.cb_map.setItemText(38, _translate("Frame_Rw", "Ex-2-2"))
+        self.cb_map.setItemText(39, _translate("Frame_Rw", "Ex-2-3"))
+        self.cb_map.setItemText(40, _translate("Frame_Rw", "Ex-3"))
+        self.cb_map.setItemText(41, _translate("Frame_Rw", "Ex-3-1"))
+        self.cb_map.setItemText(42, _translate("Frame_Rw", "Ex-3-2"))
+        self.cb_map.setItemText(43, _translate("Frame_Rw", "Ex-3-3"))
+        self.cb_map.setItemText(44, _translate("Frame_Rw", "Ex-3-4"))
+        self.cb_map.setItemText(45, _translate("Frame_Rw", "Ex-4"))
+        self.cb_map.setItemText(46, _translate("Frame_Rw", "Ex-4-1"))
+        self.cb_map.setItemText(47, _translate("Frame_Rw", "Ex-4-2"))
+        self.cb_map.setItemText(48, _translate("Frame_Rw", "Ex-4-3"))
+        self.cb_map.setItemText(49, _translate("Frame_Rw", "Ex-4-4"))
+        self.cb_map.setItemText(50, _translate("Frame_Rw", "Ex-4-5"))
+        self.cb_map.setItemText(51, _translate("Frame_Rw", "Ex-5"))
+        self.cb_map.setItemText(52, _translate("Frame_Rw", "Ex-6"))
+        self.cb_map.setItemText(53, _translate("Frame_Rw", "Ex-7"))
+        self.cb_map.setItemText(54, _translate("Frame_Rw", "Ex-8"))
         self.label_3.setText(_translate("Frame_Rw", "配置名称："))
         self.label_5.setText(_translate("Frame_Rw", "经过点(无序):"))
         self.groupBox_2.setTitle(_translate("Frame_Rw", "全局配置(低优先级)"))
@@ -306,4 +332,3 @@ class Ui_Frame_Rw(object):
         self.cb_nightFight.setText(_translate("Frame_Rw", "全局夜战"))
         self.cb_resource.setText(_translate("Frame_Rw", "资源点SL"))
         self.groupBox_3.setTitle(_translate("Frame_Rw", "单独配置(高优先级)   --  阵容SL在这里"))
-

@@ -6,10 +6,7 @@ import logging
 import win32api
 import win32con
 
-VERSION = "1.7.0.0"
-BUILD_VERSION = 1
-
-
+VERSION = 0.70
 RES = {2: '油', 3: '弹', 4: '钢', 9: '铝', 10141: "航母核心", 10241: '战列核心', 10341: '巡洋核心', 10441: '驱逐核心',
        10541: '潜艇核心', 141: '快速建造', 241: '建造蓝图', 541: '快速修理', 741: '装备蓝图', 66641: '损管'}
 
@@ -49,7 +46,10 @@ class InitData:
             with open('data/init.json', 'r') as f:
                 data = f.read()
             self.init_data = json.loads(data)
-            self.init_version = self.init_data['DataVersion']
+            #对比数据版本默认设置低版本
+            self.init_version = '20180927142352'
+            if "DataVersion" in self.init_data:
+                self.init_version = self.init_data["DataVersion"]
             if "res_url" in self.init_data:
                 self.res_url = self.init_data["res_url"]
             # 领导船只cid数据
@@ -146,7 +146,7 @@ class Logger:
     def get_log(self):
         try:
             with open(self.path, 'r') as f:
-                with open(self.get_desktop() + "/护萌宝{}.log".format(
+                with open(self.get_desktop() + "/护萌宝·Re{}.log".format(
                         time.strftime("%m-%d-%H-%M-%S", time.localtime())), 'w') as f2:
                     f2.write(f.read())
         except Exception as e:

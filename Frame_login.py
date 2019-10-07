@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'Frame_login.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Frame_login(object):
     def setupUi(self, Frame_login):
@@ -58,4 +60,3 @@ class Ui_Frame_login(object):
         Frame_login.setWindowTitle(_translate("Frame_login", "登录"))
         self.bt_login.setText(_translate("Frame_login", "登录"))
         self.bt_change_user.setText(_translate("Frame_login", "帐号"))
-

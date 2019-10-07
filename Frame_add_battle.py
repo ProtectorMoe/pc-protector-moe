@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'Frame_add_battle.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Frame_add_battle(object):
     def setupUi(self, Frame_add_battle):
@@ -288,4 +290,3 @@ class Ui_Frame_add_battle(object):
         self.label_12.setText(_translate("Frame_add_battle", "模糊匹配,使用 - 分割"))
         self.bt_re.setText(_translate("Frame_add_battle", "编队"))
         self.bt_setFleet.setText(_translate("Frame_add_battle", "预设"))
-

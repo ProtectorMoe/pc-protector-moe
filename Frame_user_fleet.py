@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'Frame_user_fleet.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_UserFleet(object):
     def setupUi(self, UserFleet):
@@ -93,4 +95,3 @@ class Ui_UserFleet(object):
         self.bt_read.setText(_translate("UserFleet", "读取"))
         self.bt_write.setText(_translate("UserFleet", "写入"))
         self.bt_del.setText(_translate("UserFleet", "删除"))
-

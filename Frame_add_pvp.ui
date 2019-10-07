@@ -196,6 +196,28 @@
       </rect>
      </property>
     </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>360</y>
+       <width>131</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>默认取前3个好友的uid 可以自己设置好友的uid 勾选好友演习复选框即可设置好友演习</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
    <widget class="QRadioButton" name="rb_timer">
     <property name="geometry">
@@ -270,6 +292,29 @@
     </property>
     <property name="maximum">
      <number>23</number>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="friendcheck">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>10</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>好友演习</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="friendlist">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>10</y>
+      <width>211</width>
+      <height>20</height>
+     </rect>
     </property>
    </widget>
   </widget>

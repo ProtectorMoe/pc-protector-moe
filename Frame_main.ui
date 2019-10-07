@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>护萌宝</string>
+   <string>护萌宝·Re</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -38,7 +38,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>521</width>
+      <width>581</width>
       <height>51</height>
      </rect>
     </property>
@@ -797,7 +797,7 @@
          </rect>
         </property>
         <property name="title">
-         <string>空闲设置</string>
+         <string>设置</string>
         </property>
         <widget class="QCheckBox" name="cb_free_explore">
          <property name="geometry">
@@ -825,7 +825,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>空闲时泡澡</string>
+          <string>泡澡</string>
          </property>
         </widget>
        </widget>
@@ -1106,6 +1106,45 @@
         </property>
         <property name="text">
          <string>结果：朱诺，亚特兰大</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="RelineEdit">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>280</y>
+          <width>113</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>30</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_15">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>310</y>
+          <width>81</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>秒后重新登录</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_16">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>280</y>
+          <width>54</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>掉线后</string>
         </property>
        </widget>
       </widget>
@@ -1804,7 +1843,7 @@
         </rect>
        </property>
        <property name="title">
-        <string>修理--未开放</string>
+        <string>泡澡</string>
        </property>
        <widget class="QCheckBox" name="cb_repair_2">
         <property name="geometry">
@@ -1816,7 +1855,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>自动修理开关</string>
+         <string>未定义</string>
         </property>
        </widget>
        <widget class="QCheckBox" name="cb_repair_time">
@@ -1832,7 +1871,7 @@
          <string>超过</string>
         </property>
        </widget>
-       <widget class="QTimeEdit" name="ed_repair_time">
+       <widget class="QDoubleSpinBox" name="ed_repair_time">
         <property name="geometry">
          <rect>
           <x>60</x>
@@ -1852,104 +1891,12 @@
          </rect>
         </property>
         <property name="text">
-         <string>使用快修</string>
+         <string>小时使用快修</string>
         </property>
        </widget>
       </widget>
      </widget>
     </widget>
-   </widget>
-   <widget class="QLabel" name="label_21">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>0</y>
-      <width>71</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Box</enum>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>icon/qun.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>10</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>icon/zfb.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>10</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>icon/wx.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="bt_pay">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>40</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>支持作者</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_13">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>10</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>icon/hbicon.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

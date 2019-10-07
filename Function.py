@@ -52,9 +52,7 @@ class GameFunction:
         try:
             log.debug("Login award:", "")
             url = self.server + 'active/getLoginAward/c3ecc6250c89e88d83832e3395efb973/' + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -77,9 +75,7 @@ class GameFunction:
         try:
             url = self.server + '{head}/cha11enge/{map}/{team}/0/'.format(map=maps, team=team, head=head) + self.get_url_end()
             log.debug("Start challenge:", "{head}/cha11enge/{map}/{team}".format(map=maps, team=team, head=head))
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -100,9 +96,7 @@ class GameFunction:
         """
         try:
             url = self.server + '{head}/newNext/'.format(head=head) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -116,15 +110,18 @@ class GameFunction:
             print('New next FAILED! Reason:', Error_information)
             raise
 
-    def challenge_fight(self, maps, team, formats, head="pve"):
+    def challenge_fight(self, maps, team, formats, head="pve",dealto='dealto'):
         """
         功能：开始战斗
         返回值：dict
         """
         try:
-            arg = self.str_arg(maps=maps, team=team, formats=formats, head=head)
+            arg = self.str_arg(maps=maps, team=team, formats=formats, head=head,dealto=dealto)
+            #玩具图
+            if int(maps)>941900:
+                arg["team"]='0'
             log.debug("Challenge fight", arg)
-            url = self.server + '{head}/dealto/{maps}/{team}/{formats}/'.format(**arg) + self.get_url_end()
+            url = self.server + '{head}/{dealto}/{maps}/{team}/{formats}/'.format(**arg) + self.get_url_end()
             data = zlib.decompress(
                 session.post(url=url, headers=HEADER,
                              cookies=self.cookies, timeout=10, data={'pve_level': 1, 'pid': random.randint(1000000, 2000000)}).content)
@@ -150,9 +147,7 @@ class GameFunction:
         try:
             url = self.server + '{head}/getWarResult/'.format(head=head) + str(is_night_fight) + '/' + self.get_url_end()
             log.debug("Get Result", url)
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -173,9 +168,7 @@ class GameFunction:
         """
         try:
             url = self.server + '{head}/SkipWar/'.format(head=head) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -193,9 +186,7 @@ class GameFunction:
         """
         try:
             url = self.server + '{head}/spy/'.format(head=head) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -218,8 +209,7 @@ class GameFunction:
             wait = [str(x) for x in ship]
             url = self.server + 'boat/instantRepairShips/[' + ','.join(wait) + ']/' + self.get_url_end()
             log.debug("Repair:", ','.join(wait))
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if 'packageVo' in data:
@@ -250,10 +240,12 @@ class GameFunction:
             wait = [str(x) for x in ship]
             arg = self.str_arg(ids=str(ids), ship=','.join(wait))
             url = self.server + 'boat/strengthen/{ids}/[{ship}]/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
-            error_find(data)
+            if 'eid' in data:
+                if data["eid"]!=-412:
+                    error_find(data)
+
             if is_write and os.path.exists('requestsData'):
                 with open('requestsData/strengthen.json', 'w') as f:
                     f.write(json.dumps(data))
@@ -264,6 +256,30 @@ class GameFunction:
         except Exception as e:
             print('Repair FAILED! Reason:', e)
             raise
+    def skillLevelUp(self, ship):
+        """
+        功能：升级
+        返回值：dict
+        """
+        try:
+             
+            url = self.server + 'boat/skillLevelUp/{ship}/'.format(ship=ship) + self.get_url_end()
+            data=self.Mdecompress(url)
+            data = json.loads(data)
+            if 'eid' in data:
+                if data["eid"]!=-317 and data["eid"]!=-315 and data["eid"]!=-316:
+                    error_find(data)
+
+            if is_write and os.path.exists('requestsData'):
+                with open('requestsData/skillLevelUp.json', 'w') as f:
+                    f.write(json.dumps(data))
+            return data
+        except HmError as e:
+            print('skillLevelUp FAILED! Reason:', e.message)
+            raise
+        except Exception as e:
+            print('skillLevelUp FAILED! Reason:', e)
+            raise
 
     def shower(self, ship):
         """
@@ -273,8 +289,7 @@ class GameFunction:
         try:
             arg = self.str_arg(ship=ship)
             url = self.server + 'boat/repair/{ship}/0/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -296,8 +311,7 @@ class GameFunction:
         try:
             arg = self.str_arg(ship=ship)
             url = self.server + 'boat/rubdown/{ship}'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -319,8 +333,7 @@ class GameFunction:
         try:
             arg = self.str_arg(ship=ship, ids=ids)
             url = self.server + 'boat/repairComplete/{ids}/{ship}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -344,8 +357,11 @@ class GameFunction:
             for each in ship:
                 wait.append(str(each))
             url = self.server + 'boat/supplyBoats/[' + ','.join(wait) + ']/0/0/' + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            content=session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content
+            try:#战役报错部分
+                data = zlib.decompress(content)
+            except Exception as e:
+                data=content
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -367,8 +383,7 @@ class GameFunction:
         try:
             url = self.server + 'dock/dismantleBoat/[' + ','.join(ship) \
                   + ']/' + str(is_save) + '/' + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -390,8 +405,7 @@ class GameFunction:
         try:
             arg = self.str_arg(maps=maps)
             url = self.server + 'explore/getResult/{maps}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -413,8 +427,7 @@ class GameFunction:
         try:
             arg = self.str_arg(cid=cid)
             url = self.server + 'task/getAward/{cid}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -436,8 +449,7 @@ class GameFunction:
         try:
             arg = self.str_arg(maps=maps, team=team)
             url = self.server + 'explore/start/{team}/{maps}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -458,8 +470,7 @@ class GameFunction:
         """
         try:
             url = self.server + 'boat/lock/{ship}/'.format(ship=str(ship)) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -480,9 +491,7 @@ class GameFunction:
         """
         try:
             url = self.server + 'campaign/getFleet/{maps}/'.format(maps=str(maps)) + self.get_url_end()
-            data = zlib.decompress(
-                 session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -503,9 +512,7 @@ class GameFunction:
         """
         try:
             url = self.server + 'campaign/spy/{maps}/'.format(maps=str(maps)) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             if is_write and os.path.exists('requestsData'):
                 with open('requestsData/campaign_get_spy.json', 'w') as f:
@@ -526,9 +533,7 @@ class GameFunction:
         try:
             arg = self.str_arg(maps=maps, formats=formats)
             url = self.server + 'campaign/challenge/{maps}/{formats}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -550,9 +555,7 @@ class GameFunction:
         # isNightFight:是否夜战，是：1，不是：0
         try:
             url = self.server + 'campaign/getWarResult/{0}/'.format(str(is_night_fight)) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -566,6 +569,7 @@ class GameFunction:
             print('Campaign get result FAILED! Reason:', e)
             raise
 
+    @property
     def pvp_get_list(self):
         """
                 功能：取演习列表
@@ -573,9 +577,7 @@ class GameFunction:
                 """
         try:
             url = self.server + 'pvp/getChallengeList/' + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
 
             if is_write and os.path.exists('requestsData'):
@@ -588,18 +590,60 @@ class GameFunction:
         except Exception as e:
             print('PVP get list FAILED! Reason:', e)
             raise
-
-    def pvp_spy(self, uid, fleet):
+    @property
+    def friend_get_list(self):
         """
-                功能：取演习列表
+                功能：取好友演习列表
                 返回值：dict
                 """
         try:
-            arg = self.str_arg(uid=uid, fleet=fleet)
-            url = self.server + 'pvp/spy/{uid}/{fleet}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            url = self.server + 'friend/getlist' + self.get_url_end()
+            data=self.Mdecompress(url)
+            data = json.loads(data)
+
+            if is_write and os.path.exists('requestsData'):
+                with open('requestsData/friend_list.json', 'w') as f:
+                    f.write(json.dumps(data))
+            return data
+        except HmError as e:
+            print('friend get list FAILED! Reason:', e.message)
+            raise
+        except Exception as e:
+            print('friend get list FAILED! Reason:', e)
+            raise
+
+    def friend_visitorFriend(self, uid):
+        """
+                功能：查询好友状态
+                返回值：dict
+                """
+        try:
+            arg = self.str_arg(uid=uid)
+            url = self.server + 'friend/visitorFriend/{uid}/'.format(**arg) + self.get_url_end()
+            data=self.Mdecompress(url)
+            data = json.loads(data)
+            error_find(data)
+            if is_write and os.path.exists('requestsData'):
+                with open('requestsData/visitor_Friend.json', 'w') as f:
+                    f.write(json.dumps(data))
+            return data
+        except HmError as e:
+            print('visitor_Friend FAILED! Reason:', e.message)
+            raise
+        except Exception as e:
+            print('visitor_Friend FAILED! Reason:', e)
+            raise
+
+
+    def pvp_spy(self, uid, fleet,pvp="pvp"):
+        """
+                功能：索敌
+                返回值：dict
+                """
+        try:
+            arg = self.str_arg(uid=uid, fleet=fleet,pvp=pvp)
+            url = self.server + '{pvp}/spy/{uid}/{fleet}/'.format(**arg) + self.get_url_end()
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -614,17 +658,15 @@ class GameFunction:
             raise
 
 
-    def pvp_fight(self, uid, fleet, formats):
+    def pvp_fight(self, uid, fleet, formats,pvp="pvp"):
         """
-        功能：取演习列表
+        功能：战斗
         返回值：dict
         """
         try:
-            arg = self.str_arg(uid=uid, fleet=fleet, formats=formats)
-            url = self.server + 'pvp/challenge/{uid}/{fleet}/{formats}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            arg = self.str_arg(uid=uid, fleet=fleet, formats=formats,pvp=pvp)
+            url = self.server + '{pvp}/challenge/{uid}/{fleet}/{formats}/'.format(**arg) + self.get_url_end()
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -638,17 +680,16 @@ class GameFunction:
             print('PVP fight FAILED! Reason:', Error_information)
             raise
 
-    def pvp_get_result(self, is_night_fight):
+    def pvp_get_result(self, is_night_fight,pvp="pvp"):
         """
         功能：取战斗结果
         返回值：dict
         """
         # isNightFight:是否夜战，是：1，不是：0
         try:
-            url = self.server + 'pvp/getWarResult/{0}/'.format(str(is_night_fight)) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            arg = self.str_arg(is_night_fight=str(is_night_fight), pvp=pvp)
+            url = self.server + '{pvp}/getWarResult/{is_night_fight}/'.format(**arg) + self.get_url_end()
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -672,9 +713,7 @@ class GameFunction:
             arg = self.str_arg(dock=dock, oil=oil, ammo=ammo, steel=steel, aluminium=aluminium)
             url = self.server + 'dock/buildBoat/{dock}/{oil}/{steel}/{ammo}/{aluminium}'.format(
                 **arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -698,9 +737,7 @@ class GameFunction:
             arg = self.str_arg(dock=dock, oil=oil, ammo=ammo, steel=steel, aluminium=aluminium)
             url = self.server + 'dock/buildEquipment/{dock}/{oil}/{steel}/{ammo}/{aluminium}'.format(
                 **arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -722,9 +759,7 @@ class GameFunction:
         try:
             arg = self.str_arg(dock=dock)
             url = self.server + 'dock/getBoat/{dock}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -746,9 +781,7 @@ class GameFunction:
         try:
             arg = self.str_arg(dock=dock)
             url = self.server + 'dock/getEquipment/{dock}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -770,9 +803,7 @@ class GameFunction:
         try:
             arg = self.str_arg(dock=dock)
             url = self.server + 'dock/instantBuild/{dock}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -794,9 +825,7 @@ class GameFunction:
         try:
             arg = self.str_arg(dock=dock)
             url = self.server + 'dock/instantEquipmentBuild/{dock}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -818,9 +847,7 @@ class GameFunction:
         try:
             arg = self.str_arg(fleet=fleet, ids=ids, path=path)
             url = self.server + 'boat/changeBoat/{fleet}/{ids}/{path}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -842,9 +869,7 @@ class GameFunction:
         try:
             arg = self.str_arg(fleet=fleet, path=path)
             url = self.server + 'boat/removeBoat/{fleet}/{path}/'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -866,9 +891,7 @@ class GameFunction:
         try:
             arg = self.str_arg(ids=ids, path=path)
             url = self.server + 'boat/removeEquipment/{ids}/{path}'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -890,9 +913,7 @@ class GameFunction:
         try:
             arg = self.str_arg(ids=ids, path=path, cid=cid)
             url = self.server + 'boat/changeEquipment/{ids}/{cid}/{path}'.format(**arg) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -915,9 +936,7 @@ class GameFunction:
             arg = self.str_arg(ids=ids, new_name=new_name)
             url = self.server + 'boat/renameShip/{ids}/{new_name}/'.format(**arg) + self.get_url_end()
             url = quote(url, safe=";/?:@&=+$,", encoding="utf-8")
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                             cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -938,9 +957,8 @@ class GameFunction:
          """
         try:
             url = self.server + 'dock/dismantleEquipment/' + self.get_url_end()
-            data = '{' + '"{}":{}'.format(str(cid), str(num)) + '}'
-            data = zlib.decompress(
-                session.post(url=url, headers=HEADER, cookies=self.cookies, data={"content": data}, timeout=10).content)
+            vdata = 'content={' + '"{}":{}'.format(str(cid), str(num)) + '}'
+            data=self.Mdecompress(url,vdata)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -961,9 +979,7 @@ class GameFunction:
                 """
         try:
             url = self.server + 'ocean/getCIAList/' + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -984,9 +1000,7 @@ class GameFunction:
             ships = "[" + ",".join([str(x) for x in ship]) + "]"
             args = self.str_arg(fleet=fleet, ships=ships)
             url = self.server + 'boat/instantFleet/{fleet}/{ships}/'.format(**args) + self.get_url_end()
-            data = zlib.decompress(
-                session.get(url=url, headers=HEADER,
-                            cookies=self.cookies, timeout=10).content)
+            data=self.Mdecompress(url)
             data = json.loads(data)
             error_find(data)
             if is_write and os.path.exists('requestsData'):
@@ -1033,6 +1047,20 @@ class GameFunction:
         url_end_dict = {'time': url_time, 'key': md5, 'channel': self.channel, 'version': self.version}
         url_end = url_end.format(**url_end_dict)
         return url_end
+
+    def Mdecompress(self,url,*vdata):
+        if  len(vdata)==0:
+            content = session.get(url=url, headers=HEADER, cookies=self.cookies, timeout=10).content
+        else:
+            h=HEADER
+            h["Content-Type"]="application/x-www-form-urlencoded"
+            content = session.post(url=url,data=str(vdata[0]), headers=h, cookies=self.cookies, timeout=10).content
+
+        try:  # 解码统一
+            data = zlib.decompress(content)
+        except Exception as e:
+            data = content
+        return data
 
     @staticmethod
     def get_md5(data):
