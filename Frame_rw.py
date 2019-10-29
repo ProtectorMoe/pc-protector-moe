@@ -2,13 +2,11 @@
 
 # Form implementation generated from reading ui file 'Frame_rw.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Frame_Rw(object):
     def setupUi(self, Frame_Rw):
@@ -332,3 +330,4 @@ class Ui_Frame_Rw(object):
         self.cb_nightFight.setText(_translate("Frame_Rw", "全局夜战"))
         self.cb_resource.setText(_translate("Frame_Rw", "资源点SL"))
         self.groupBox_3.setTitle(_translate("Frame_Rw", "单独配置(高优先级)   --  阵容SL在这里"))
+

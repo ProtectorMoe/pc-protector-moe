@@ -2,13 +2,11 @@
 
 # Form implementation generated from reading ui file 'Frame_select_ship.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Frame_select_ship(object):
     def setupUi(self, Frame_select_ship):
@@ -116,3 +114,4 @@ class Ui_Frame_select_ship(object):
         self.cb_type.setItemText(20, _translate("Frame_select_ship", "其他"))
         self.label_3.setText(_translate("Frame_select_ship", "类型:"))
         self.label_4.setText(_translate("Frame_select_ship", "名称:"))
+

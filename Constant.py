@@ -6,7 +6,9 @@ import logging
 import win32api
 import win32con
 
-VERSION = 0.70
+VERSION = "1.7.0.1"
+BUILD_VERSION = 2
+
 RES = {2: '油', 3: '弹', 4: '钢', 9: '铝', 10141: "航母核心", 10241: '战列核心', 10341: '巡洋核心', 10441: '驱逐核心',
        10541: '潜艇核心', 141: '快速建造', 241: '建造蓝图', 541: '快速修理', 741: '装备蓝图', 66641: '损管'}
 
@@ -14,6 +16,8 @@ HEADER = {'Accept-Encoding': 'identity',
           'Connection': 'Keep-Alive',
           'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1.1; mi max Build/LMY48Z)'}
 
+UPDATE_URL = "http://update.protector.moe/pc/version.json"
+DOWNLOAD_URL = "https://github.com/ProtectorMoe/pc-protector-moe/releases/latest"
 
 class G:
     def __init__(self):

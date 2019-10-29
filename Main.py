@@ -44,6 +44,7 @@ class WindowsUserLogin(QDialog, Ui_Frame_user_login):
     """
     用户输入帐号和密码进行登录
     """
+
     def __init__(self):
         super(WindowsUserLogin, self).__init__()
         self.setupUi(self)
@@ -81,14 +82,19 @@ class WindowsUserLogin(QDialog, Ui_Frame_user_login):
         self.server = self.cb_server.currentIndex()
         self.isauto=self.checkBox.isChecked()
         with open("config/user.json", "w") as f:
-            data = {"username": self.username, "password": self.password, "server": self.server,"isauto":self.isauto}
+            data = {"username": self.username, "password": self.password, "server": self.server, "isauto": self.isauto}
             f.write(json.dumps(data))
+
+
+
+
 
 
 class WindowsLogin(QMainWindow, Ui_Frame_login):
     first_login_signal = pyqtSignal(dict)
     second_login_signal = pyqtSignal(dict)
     statusBarSignal = pyqtSignal(str)
+    update_signal = pyqtSignal(dict)
 
     def __init__(self):
         self.is_login_success = False
@@ -98,6 +104,8 @@ class WindowsLogin(QMainWindow, Ui_Frame_login):
         self.second_login_signal.connect(self.second_login_deal)
         self.statusBarSignal.connect(self.onstatusBar)
         self.get_login_picture()
+        self.update_signal.connect(self.show_update)
+        self.check_update()
         # 状态寄存器
         self.first_finish = False
         self.second_finish = False
@@ -135,6 +143,34 @@ class WindowsLogin(QMainWindow, Ui_Frame_login):
             ti.setVisible(False)
             os._exit(0)
 
+    def check_update(self):
+        def connect():
+            try:
+                request = requests.get(url=UPDATE_URL, timeout=5).json()
+                build_version = int(request["build_version"])
+                print(request)
+                if build_version > BUILD_VERSION:
+                    new_version = request["version"]
+                    description = request["history"][str(build_version)]
+                    self.update_signal.emit({
+                        "version": new_version,
+                        "description": description
+                    })
+
+            except Exception as e:
+                QMessageBox.warning(self, "错误", "连接到更新服务器失败!")
+        threading.Thread(target=connect).start()
+
+    def show_update(self, data):
+        try:
+            result = QMessageBox.question(self, '发现新版本',
+                                          f"新版本:{data['version']}\n更新日志:\n{data['description']}\n\n 是否下载新版本?",
+                                          QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+            if result == QMessageBox.Yes:
+                webbrowser.open(DOWNLOAD_URL)
+        except Exception as e:
+            print(e)
+
     def re_login(self):
         """
         进行SL,重新登录游戏
@@ -154,17 +190,9 @@ class WindowsLogin(QMainWindow, Ui_Frame_login):
         """
         def th_get_pic():
             try:
-                name = "1.jpg"
-                if not os.path.exists("gamepaper"):
-                    os.mkdir("gamepaper")
-
                 pic = QPixmap()
-                data = None
-                if os.path.exists("gamepaper/" + name):
-                    with open("gamepaper/" + name, 'rb') as f:
-                        data = f.read()
+                data = requests.get(f"http://update.protector.moe/gamepaper/{random.randint(1, 55)}.jpg").content
                 pic.loadFromData(data)
-
                 pic.scaled(380, 281)
                 self.tv_paper.setPixmap(pic)
             except:
@@ -974,6 +1002,12 @@ class WindowsMain(QMainWindow, Ui_Frame_main):
         self.foe_ship.connect(self.refresh_foe_ship_data)
         self.lt_rw.clicked.connect(self.show_rw_detail)
         self.cb_run.setChecked(True)
+
+        # 绑定按钮事件
+        self.btn_github.clicked.connect(lambda: webbrowser.open("https://github.com/ProtectorMoe/pc-protector-moe"))
+        self.btn_group.clicked.connect(lambda: webbrowser.open("//shang.qq.com/wpa/qunwpa?idkey=0dac9074c720bf85ecc3f96f7818f2553f823e135eae6abd48c2682eec529f79"))
+        self.btn_download.clicked.connect(lambda: webbrowser.open(DOWNLOAD_URL))
+        self.btn_cloud.clicked.connect(lambda: webbrowser.open("http://cloud.protector.moe/"))
 
     def menu_event(self):
         action_set_mine = QAction(QIcon('icon/mine.png'), '我的', self)

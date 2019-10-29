@@ -2,13 +2,11 @@
 
 # Form implementation generated from reading ui file 'Frame_user_login.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Frame_user_login(object):
     def setupUi(self, Frame_user_login):
@@ -76,3 +74,4 @@ class Ui_Frame_user_login(object):
         self.label_4.setText(_translate("Frame_user_login", "请输入游戏账号和密码"))
         self.bt_close.setText(_translate("Frame_user_login", "登录"))
         self.checkBox.setText(_translate("Frame_user_login", "自动登录"))
+

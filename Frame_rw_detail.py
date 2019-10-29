@@ -2,13 +2,11 @@
 
 # Form implementation generated from reading ui file 'Frame_rw_detail.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Frame_rw_detail(object):
     def setupUi(self, Frame_rw_detail):
@@ -191,3 +189,4 @@ class Ui_Frame_rw_detail(object):
         self.cb_foe1Deal.setItemText(4, _translate("Frame_rw_detail", "梯形"))
         self.cb_foe1Deal.setItemText(5, _translate("Frame_rw_detail", "单横"))
         self.cb_openDetail.setText(_translate("Frame_rw_detail", "开启特殊设置"))
+

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>748</width>
+    <width>747</width>
     <height>477</height>
    </rect>
   </property>
@@ -38,7 +38,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>581</width>
+      <width>511</width>
       <height>51</height>
      </rect>
     </property>
@@ -1898,13 +1898,94 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QGroupBox" name="groupBox_6">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>0</y>
+      <width>211</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>链接</string>
+    </property>
+    <widget class="QPushButton" name="btn_github">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>15</y>
+       <width>75</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Github</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>icon/GitHub.png</normaloff>icon/GitHub.png</iconset>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_group">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>15</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>QQ群</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>icon/friend.png</normaloff>icon/friend.png</iconset>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_download">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>35</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>更新</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>icon/download.png</normaloff>icon/download.png</iconset>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_cloud">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>35</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>代挂机</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>icon/cloud.png</normaloff>icon/cloud.png</iconset>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>748</width>
+     <width>747</width>
      <height>23</height>
     </rect>
    </property>

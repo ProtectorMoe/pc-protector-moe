@@ -2,13 +2,11 @@
 
 # Form implementation generated from reading ui file 'Frame_mine.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_FrameMine(object):
     def setupUi(self, FrameMine):
@@ -152,3 +150,4 @@ class Ui_FrameMine(object):
         self.bt_detail.setText(_translate("FrameMine", "查看详细/掉落信息"))
         self.tv_exist.setText(_translate("FrameMine", "共:"))
         self.tv_not_exist.setText(_translate("FrameMine", "共:"))
+

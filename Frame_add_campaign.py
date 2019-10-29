@@ -2,13 +2,11 @@
 
 # Form implementation generated from reading ui file 'Frame_add_campaign.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Frame_add_campaign(object):
     def setupUi(self, Frame_add_campaign):
@@ -128,3 +126,4 @@ class Ui_Frame_add_campaign(object):
         self.rb_timer.setText(_translate("Frame_add_campaign", "作为定时任务"))
         self.label_2.setText(_translate("Frame_add_campaign", "开始时间:"))
         self.label_13.setText(_translate("Frame_add_campaign", " :"))
+

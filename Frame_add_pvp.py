@@ -2,13 +2,11 @@
 
 # Form implementation generated from reading ui file 'Frame_add_pvp.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Frame_add_pvp(object):
     def setupUi(self, Frame_add_pvp):
@@ -123,3 +121,4 @@ class Ui_Frame_add_pvp(object):
         self.groupBox.setTitle(_translate("Frame_add_pvp", "对手"))
         self.label_13.setText(_translate("Frame_add_pvp", " :"))
         self.friendcheck.setText(_translate("Frame_add_pvp", "好友演习"))
+

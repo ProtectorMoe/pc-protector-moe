@@ -2,18 +2,16 @@
 
 # Form implementation generated from reading ui file 'Frame_main.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Frame_main(object):
     def setupUi(self, Frame_main):
         Frame_main.setObjectName("Frame_main")
-        Frame_main.resize(748, 477)
+        Frame_main.resize(747, 477)
         Frame_main.setMinimumSize(QtCore.QSize(728, 386))
         Frame_main.setMaximumSize(QtCore.QSize(16777215, 999999))
         icon = QtGui.QIcon()
@@ -23,7 +21,7 @@ class Ui_Frame_main(object):
         self.centralwidget = QtWidgets.QWidget(Frame_main)
         self.centralwidget.setObjectName("centralwidget")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox.setGeometry(QtCore.QRect(10, 10, 581, 51))
+        self.groupBox.setGeometry(QtCore.QRect(10, 10, 511, 51))
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
         self.label_7 = QtWidgets.QLabel(self.groupBox)
@@ -539,9 +537,34 @@ class Ui_Frame_main(object):
         self.label_42.setGeometry(QtCore.QRect(120, 40, 72, 20))
         self.label_42.setObjectName("label_42")
         self.sw_mian.addWidget(self.page_6)
+        self.groupBox_6 = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_6.setGeometry(QtCore.QRect(530, 0, 211, 61))
+        self.groupBox_6.setObjectName("groupBox_6")
+        self.btn_github = QtWidgets.QPushButton(self.groupBox_6)
+        self.btn_github.setGeometry(QtCore.QRect(30, 15, 75, 24))
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap("icon/GitHub.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_github.setIcon(icon6)
+        self.btn_github.setObjectName("btn_github")
+        self.btn_group = QtWidgets.QPushButton(self.groupBox_6)
+        self.btn_group.setGeometry(QtCore.QRect(110, 15, 75, 23))
+        self.btn_group.setIcon(icon2)
+        self.btn_group.setObjectName("btn_group")
+        self.btn_download = QtWidgets.QPushButton(self.groupBox_6)
+        self.btn_download.setGeometry(QtCore.QRect(30, 35, 75, 23))
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap("icon/download.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_download.setIcon(icon7)
+        self.btn_download.setObjectName("btn_download")
+        self.btn_cloud = QtWidgets.QPushButton(self.groupBox_6)
+        self.btn_cloud.setGeometry(QtCore.QRect(110, 35, 75, 23))
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap("icon/cloud.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_cloud.setIcon(icon8)
+        self.btn_cloud.setObjectName("btn_cloud")
         Frame_main.setCentralWidget(self.centralwidget)
         self.menuBar = QtWidgets.QMenuBar(Frame_main)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 748, 23))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 747, 23))
         self.menuBar.setObjectName("menuBar")
         Frame_main.setMenuBar(self.menuBar)
 
@@ -661,3 +684,9 @@ class Ui_Frame_main(object):
         self.cb_repair_2.setText(_translate("Frame_main", "未定义"))
         self.cb_repair_time.setText(_translate("Frame_main", "超过"))
         self.label_42.setText(_translate("Frame_main", "小时使用快修"))
+        self.groupBox_6.setTitle(_translate("Frame_main", "链接"))
+        self.btn_github.setText(_translate("Frame_main", "Github"))
+        self.btn_group.setText(_translate("Frame_main", "QQ群"))
+        self.btn_download.setText(_translate("Frame_main", "更新"))
+        self.btn_cloud.setText(_translate("Frame_main", "代挂机"))
+
