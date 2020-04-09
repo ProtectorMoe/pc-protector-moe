@@ -1,27 +1,28 @@
 # 护萌宝
-### 基于护肝宝二次开发的战舰少女R辅助软件
-
 ---
+### 战舰少女R 辅助软件
 
-手机版地址: [点我传送](https://github.com/bcxmzbcxm/pe-protector-moe)
-代挂机服务: [点我传送](http://cloud.protector.moe)
+本软件为本人初学编程时的练手做, 因此结构混乱, 代码冗杂, 耦合度极高, 命名混乱, 不再具有可维护性与维护价值, 本人已经放弃维护.
 
----
+现在已存在魔改版, 请自行搜索
 
-本软件基于护肝宝进行二次开发, 由于原作者代码写的太乱, 不对此软件进行长期更新, 只对基础功能进行维护
+**适用版本: 理论上`4.X`通用**
 
+### 目前功能
+- 自动远征
+- 战役演习泡澡
+- 定时操作
+- 自适应版本号
 
-如果您有任何问题, 您可以通过以下方式联系我
- >* **issues**
- >* bcxmzbcxm@outlook.com
+### 目前有问题功能
+- 轮换功能会出现不存在错误
+- 出征可能出现未知错误
+- cpu占用偏高
 
-提交bug时, 请附带以下信息:
->* 软件版本号
->* 出错功能
->* **软件自带日志**
->* 您的邮箱
+### 替代品
+- [手机版](https://github.com/ProtectorMoe/pe-protector-moe) (暂停开发)
+- [跨平台版](https://github.com/ProtectorMoe/common-protector-moe) (暂停开发)
+- [Golang版](https://github.com/simonkimi/warshipgirl-tools) (仅会有小功能)
 
-
-暂不接受以下问题
->* 原作者未开发完问题
->* 各种错误代码
+### Licence
+本软件遵循GNU General Public License v3, 仅作为学习用途, 严禁商用!
